@@ -18,7 +18,8 @@ describe('Register Use Case', () => {
             name: 'ripan renaldi',
             password: 'rahasia',
             role: 'admin',
-            username: 'ripanrenaldi'
+            username: 'ripanrenaldi',
+            nik: '123123'
         };
 
         const mockUserToRegister = new RegisterUser({...payload, password: 'encrypted password'});

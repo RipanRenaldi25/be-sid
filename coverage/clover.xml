@@ -1,39 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1692717547814" clover="3.2.0">
-  <project timestamp="1692717547814" name="All files">
-    <metrics statements="76" coveredstatements="73" conditionals="2" coveredconditionals="2" methods="31" coveredmethods="28" elements="109" coveredelements="103" complexity="0" loc="76" ncloc="76" packages="7" files="11" classes="11"/>
+<coverage generated="1692717650842" clover="3.2.0">
+  <project timestamp="1692717650842" name="All files">
+    <metrics statements="85" coveredstatements="85" conditionals="2" coveredconditionals="2" methods="33" coveredmethods="33" elements="120" coveredelements="120" complexity="0" loc="85" ncloc="85" packages="8" files="12" classes="12"/>
+    <package name="Applications">
+      <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+      <file name="RegisterUsecase.ts" path="D:\project\SID\app\be_baru\src\Applications\RegisterUsecase.ts">
+        <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+      </file>
+    </package>
     <package name="Commons.Exceptions">
       <metrics statements="4" coveredstatements="4" conditionals="1" coveredconditionals="1" methods="1" coveredmethods="1"/>
       <file name="InvariantError.ts" path="D:\project\SID\app\be_baru\src\Commons\Exceptions\InvariantError.ts">
         <metrics statements="4" coveredstatements="4" conditionals="1" coveredconditionals="1" methods="1" coveredmethods="1"/>
-        <line num="1" count="5" type="stmt"/>
+        <line num="1" count="7" type="stmt"/>
         <line num="5" count="6" type="stmt"/>
         <line num="6" count="6" type="stmt"/>
-        <line num="10" count="5" type="stmt"/>
+        <line num="10" count="7" type="stmt"/>
       </file>
     </package>
     <package name="Domains.Entities.Users">
       <metrics statements="28" coveredstatements="28" conditionals="0" coveredconditionals="0" methods="14" coveredmethods="14"/>
       <file name="RegisterUser.ts" path="D:\project\SID\app\be_baru\src\Domains\Entities\Users\RegisterUser.ts">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="2" count="1" type="stmt"/>
-        <line num="8" count="5" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="8" count="8" type="stmt"/>
+        <line num="12" count="3" type="stmt"/>
       </file>
       <file name="RegisteredUser.ts" path="D:\project\SID\app\be_baru\src\Domains\Entities\Users\RegisteredUser.ts">
         <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="7"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="4" count="1" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
-        <line num="17" count="1" type="stmt"/>
-        <line num="18" count="1" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
         <line num="30" count="1" type="stmt"/>
         <line num="34" count="1" type="stmt"/>
         <line num="38" count="1" type="stmt"/>
         <line num="42" count="1" type="stmt"/>
-        <line num="54" count="1" type="stmt"/>
+        <line num="54" count="2" type="stmt"/>
       </file>
       <file name="UserLogedIn.ts" path="D:\project\SID\app\be_baru\src\Domains\Entities\Users\UserLogedIn.ts">
         <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="6"/>
@@ -56,25 +71,25 @@
       <metrics statements="19" coveredstatements="19" conditionals="0" coveredconditionals="0" methods="11" coveredmethods="11"/>
       <file name="AbstractUser.ts" path="D:\project\SID\app\be_baru\src\Domains\Entities\Users\Interface\AbstractUser.ts">
         <metrics statements="19" coveredstatements="19" conditionals="0" coveredconditionals="0" methods="11" coveredmethods="11"/>
-        <line num="2" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="14" count="5" type="stmt"/>
-        <line num="15" count="3" type="stmt"/>
-        <line num="16" count="3" type="stmt"/>
-        <line num="17" count="3" type="stmt"/>
-        <line num="18" count="3" type="stmt"/>
-        <line num="19" count="3" type="stmt"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
+        <line num="14" count="8" type="stmt"/>
+        <line num="15" count="6" type="stmt"/>
+        <line num="16" count="6" type="stmt"/>
+        <line num="17" count="6" type="stmt"/>
+        <line num="18" count="6" type="stmt"/>
+        <line num="19" count="6" type="stmt"/>
         <line num="31" count="3" type="stmt"/>
         <line num="35" count="1" type="stmt"/>
         <line num="39" count="3" type="stmt"/>
         <line num="43" count="1" type="stmt"/>
-        <line num="47" count="3" type="stmt"/>
+        <line num="47" count="4" type="stmt"/>
         <line num="51" count="1" type="stmt"/>
-        <line num="55" count="3" type="stmt"/>
-        <line num="59" count="1" type="stmt"/>
+        <line num="55" count="4" type="stmt"/>
+        <line num="59" count="2" type="stmt"/>
         <line num="63" count="2" type="stmt"/>
         <line num="67" count="1" type="stmt"/>
-        <line num="74" count="1" type="stmt"/>
+        <line num="74" count="3" type="stmt"/>
       </file>
     </package>
     <package name="Domains.Entities.Users.schema">
@@ -87,25 +102,25 @@
       </file>
       <file name="RegisteredUserSchema.ts" path="D:\project\SID\app\be_baru\src\Domains\Entities\Users\schema\RegisteredUserSchema.ts">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="9" count="1" type="stmt"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
       </file>
       <file name="UserSchema.ts" path="D:\project\SID\app\be_baru\src\Domains\Entities\Users\schema\UserSchema.ts">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
+        <line num="11" count="3" type="stmt"/>
       </file>
     </package>
     <package name="Domains.Repository">
-      <metrics statements="4" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+      <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
       <file name="UserRepositoryAbstract.ts" path="D:\project\SID\app\be_baru\src\Domains\Repository\UserRepositoryAbstract.ts">
-        <metrics statements="4" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="19" count="1" type="stmt"/>
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="19" count="3" type="stmt"/>
       </file>
     </package>
     <package name="Infrastructures.Database.Prisma.PostgreSQL">
