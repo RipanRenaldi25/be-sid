@@ -1,8 +1,8 @@
 import InvariantError from "../../Commons/Exceptions/InvariantError";
+import RegisterUser from "../../Domains/Entities/Users/RegisterUser";
+import RegisteredUser from "../../Domains/Entities/Users/RegisteredUser";
 import UserRepositoryAbstract from "../../Domains/Repository/UserRepositoryAbstract";
 import { PrismaClient } from "@prisma/client";
-
-
 
 class UserRepositoryConcrete extends UserRepositoryAbstract {
     prisma: PrismaClient;
@@ -23,6 +23,32 @@ class UserRepositoryConcrete extends UserRepositoryAbstract {
         if(!!user){
             throw new InvariantError('Username sudah digunakan', 400);
         };
+    }
+    
+    async register(payload: RegisterUser):Promise<RegisteredUser> {
+        const id = `user-${this.idGenerator()}`;
+        const {username, name, nik, password} = payload;
+        const newUser = await this.prisma.user.create({
+            data: {
+                id,
+                username,
+                name,
+                nik,
+                password,
+                userRole: {
+                    connectOrCreate: {
+                        where: {
+                            role: payload.role
+                        },
+                        create: {
+                            role: payload.role
+                        }
+                    }
+                }
+            }
+        })
+
+        return new RegisteredUser({...newUser});
     }
 
 }

@@ -13,11 +13,20 @@ const databaseHelper = {
                 nik: '123456',
                 password: 'rahasia',
                 username: 'ripanrenaldi',
-                role: 'admin',
+                userRole: {
+                    connectOrCreate: {
+                        where: {
+                            role: payload.role
+                        },
+                        create: {
+                            role: payload.role
+                        }
+                    }
+                }
             },
         });
         
-        console.log(newUser);
+        return newUser;
     },
     async findUserById(id: string){
         const user = await prismaClient.user.findUnique({
