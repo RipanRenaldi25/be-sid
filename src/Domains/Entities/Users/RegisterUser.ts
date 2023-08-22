@@ -4,8 +4,8 @@ import IUser from "./Interface/UserInterface";
 
 
 class RegisterUser extends User {
-    constructor({username, password, role, name}: IUser){
-        super({username, password, role, name});
+    constructor({username, password, role, name, nik}: IUser){
+        super({username, password, role, name, nik});
     }
 }
 

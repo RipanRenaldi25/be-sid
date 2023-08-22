@@ -1,26 +1,29 @@
 import IUser from "./UserInterface";
 import UserSchema from "../schema/UserSchema";
+import InvariantError from "../../../../Commons/Exceptions/InvariantError";
 
 abstract class User implements IUser {
     protected _username: string;
     protected _password: string;
     protected _role: string;
     protected _name: string;
+    protected _nik: string;
     
 
-    constructor({username, password, role, name}: IUser){
-        this.validate({username, password, role, name});
+    constructor({username, password, role, name, nik}: IUser){
+        this.validate({username, password, role, name, nik});
         this._username = username;
         this._password = password;
         this._role = role;
         this._name = name;
+        this._nik = nik
     }
 
         /* istanbul ignore next */
     validate(payload: Partial<IUser>): void {
         const result = UserSchema.validate(payload);
         if(result.error){
-            throw new Error()
+            throw new InvariantError(result.error.message);
         }
     };
 
@@ -54,6 +57,14 @@ abstract class User implements IUser {
 
     set password(newPassword) {
         this._password = newPassword;
+    }
+
+    get nik(): string{
+        return this._nik;
+    }
+
+    set nik(newNik){
+        this._nik = newNik;
     }
 
 

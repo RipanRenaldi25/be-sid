@@ -5,6 +5,7 @@ const UserSchema = Joi.object({
     name: Joi.string().required().min(2).max(100),
     password: Joi.string().min(6).max(100).required(),
     role: Joi.string().required(),
+    nik: Joi.string().required()
 })
 
 export default UserSchema;

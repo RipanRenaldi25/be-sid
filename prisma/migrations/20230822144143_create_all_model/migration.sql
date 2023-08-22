@@ -15,7 +15,7 @@ CREATE TABLE "roles" (
     "id" SERIAL NOT NULL,
     "role" VARCHAR(100) NOT NULL,
 
-    CONSTRAINT "roles_pkey" PRIMARY KEY ("role")
+    CONSTRAINT "roles_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -42,6 +42,9 @@ CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_nik_key" ON "users"("nik");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "roles_role_key" ON "roles"("role");
 
 -- AddForeignKey
 ALTER TABLE "users" ADD CONSTRAINT "users_role_fkey" FOREIGN KEY ("role") REFERENCES "roles"("role") ON DELETE RESTRICT ON UPDATE CASCADE;

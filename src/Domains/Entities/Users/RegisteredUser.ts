@@ -3,7 +3,7 @@ import User from "./Interface/AbstractUser";
 import RegisteredUserSchema from "./schema/RegisteredUserSchema";
 import InvariantError from "../../../Commons/Exceptions/InvariantError";
 
-export type RegisteredUserType =  Omit<IUser, 'password' | 'role'> & {
+export type RegisteredUserType =  Omit<IUser, 'password' | 'role' | 'nik'> & {
     id: string
 }
 
