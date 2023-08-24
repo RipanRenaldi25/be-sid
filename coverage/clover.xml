@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1692720887689" clover="3.2.0">
-  <project timestamp="1692720887689" name="All files">
-    <metrics statements="90" coveredstatements="90" conditionals="2" coveredconditionals="2" methods="34" coveredmethods="34" elements="126" coveredelements="126" complexity="0" loc="90" ncloc="90" packages="8" files="12" classes="12"/>
+<coverage generated="1692851438273" clover="3.2.0">
+  <project timestamp="1692851438273" name="All files">
+    <metrics statements="102" coveredstatements="102" conditionals="2" coveredconditionals="2" methods="37" coveredmethods="37" elements="141" coveredelements="141" complexity="0" loc="102" ncloc="102" packages="10" files="14" classes="14"/>
     <package name="Applications">
       <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
       <file name="RegisterUsecase.ts" path="D:\project\SID\app\be_baru\src\Applications\RegisterUsecase.ts">
@@ -132,6 +132,17 @@
         <line num="7" count="1" type="stmt"/>
       </file>
     </package>
+    <package name="Infrastructures.Http.Express">
+      <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="CreateServer.ts" path="D:\project\SID\app\be_baru\src\Infrastructures\Http\Express\CreateServer.ts">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+      </file>
+    </package>
     <package name="Infrastructures.Repository">
       <metrics statements="14" coveredstatements="14" conditionals="1" coveredconditionals="1" methods="3" coveredmethods="3"/>
       <file name="UserRepositoryConcrete.ts" path="D:\project\SID\app\be_baru\src\Infrastructures\Repository\UserRepositoryConcrete.ts">
@@ -150,6 +161,19 @@
         <line num="31" count="2" type="stmt"/>
         <line num="51" count="2" type="stmt"/>
         <line num="56" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="Interfaces.Http.Api">
+      <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+      <file name="routes.ts" path="D:\project\SID\app\be_baru\src\Interfaces\Http\Api\routes.ts">
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
       </file>
     </package>
   </project>
