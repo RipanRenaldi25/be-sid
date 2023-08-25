@@ -1,5 +1,5 @@
 import UserLogedIn from "../../Domains/Entities/Users/UserLogedIn";
-import UserRepositoryAbstract from "../../Domains/Repository/UserRepositoryAbstract";
+import UserRepositoryAbstract, { UserWithRoleType } from "../../Domains/Repository/UserRepositoryAbstract";
 import TokenGeneratorAbstract from "../Security/TokenGeneratorAbstract";
 
 class LoginUsecase {
@@ -12,29 +12,25 @@ class LoginUsecase {
     }
 
     async execute(payload: {username: string, password: string}) {
-        let token;
         const {username, password} = payload;
         await this.userRepository.checkUserOnDatabase(username);
-        const user = await this.userRepository.login({username, password});
-        if(!process.env.SECRET_TOKEN) {
-            token = this.tokenGenerator.generateToken({
-                id: user.id,
-                role: user.role,
-                username,
-            }, 'TOKEN_RAHASIA');
-        }else{
-            token = this.tokenGenerator.generateToken({
-                id: user.id,
-                role: user.role,
-                username,
-            }, process.env.SECRET_TOKEN);
+        await this.userRepository.login({username, password});
+        const user = await this.userRepository.getUserByUsername(username);
+        const token = this.tokenGenerator.generateToken({
+            id: user!.id,
+            role: user!.role,
+            username,
+        }, process.env.SECRET_TOKEN! || 'TOKEN_RAHASIA');
+        const returnedUser: Pick<UserLogedIn, 'id' | 'name' | 'role' | 'token'> & {
+            username: string
+        } = {
+            id: user!.id,
+            role: user!.role,
+            name: user!.name,
+            username,
+            token,
         }
-        return new UserLogedIn({
-            id: user.id,
-            role: user.role,
-            name: user.name,
-            token
-        });
+        return returnedUser;
     }
 }
 

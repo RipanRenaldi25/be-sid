@@ -5,8 +5,8 @@ import express from 'express';
 import createServer from '../../../../../Infrastructures/Http/Express/CreateServer';
 import databaseHelper from '../../../../../Commons/Helpers/DatabaseHelper';
 import RegisterUser from '../../../../../Domains/Entities/Users/RegisterUser';
-import container from '../../../../../Infrastructures/Container/ServicesContainer';
-import RegisterUseCase from '../../../../../Applications/Usecase/RegisterUsecase';
+import PasswordHashAbstract from '../../../../../Applications/Security/PasswordHash';
+import UserLogedIn from '../../../../../Domains/Entities/Users/UserLogedIn';
 
 /**
  * Test case
@@ -17,6 +17,15 @@ import RegisterUseCase from '../../../../../Applications/Usecase/RegisterUsecase
  *      * Should return response property with correct property (id, name, username)
  *      * Should return 400 when username is not available in database
  */
+
+class PasswordHash extends PasswordHashAbstract {
+    async comparePassword(password: string, passwordHashed: string): Promise<boolean> {
+        throw new Error();
+    }
+    async hash(password: string): Promise<string> {
+        throw new Error();
+    }
+}
 
 describe('/users', () => {
     let app: express.Express = createServer();
@@ -86,5 +95,58 @@ describe('/users', () => {
             expect(response.body.data.name).toBe('ripan renaldi');
         });
 
+    })
+    describe('/login', () => {
+        it('Should be able to throw unauthorize error when username or password is incorrect', async () => {
+            const payload = {
+                username: 'ripanrenaldi',
+                password: 'rahasia',
+                role: 'user',
+                name: 'ripan renaldi',
+                nik: '273282504020002'
+            };
+            const passwordHash = new PasswordHash();
+            const registerUser = new RegisterUser(payload);
+            await databaseHelper.createUser(registerUser);
+            passwordHash.comparePassword = jest.fn().mockImplementation(() => Promise.resolve(true));
+
+            const response = await request(app).post('/users/login').send({
+                username: payload.username,
+                password: 'passwordSalah'
+            }).set('Accept', 'application/json');
+
+            expect(response.statusCode).toBe(401);
+            expect(response.body.status).toBe('fail');
+        })
+        it('Should be return response property correctly', async () => {
+            const payload = {
+                username: 'ripanrenaldi',
+                password: 'rahasia',
+                role: 'user',
+                name: 'ripan renaldi',
+                nik: '273282504020002'
+            };
+            
+            const registerUser = new RegisterUser(payload);
+            await databaseHelper.createUserWithEncryptedPassword(registerUser);
+
+            const response = await request(app).post('/users/login').send({
+                username: payload.username,
+                password: payload.password
+            }).set('Accept', 'application/json');
+            const userLogedIn = new UserLogedIn({
+                id: 'user-123',
+                name: payload.name,
+                role: payload.role,
+                token: 'asdasda'
+            })
+            
+
+            expect(response.statusCode).toBe(200);
+            expect(response.body).toBeDefined();
+            expect(response.body.status).toBe('success');
+            expect(response.body.message).toBe('berhasil login');
+            expect(response.body.data).toHaveProperty('accessToken');
+        })
     })
 })

@@ -2,6 +2,7 @@
 
 import RegisterUser from "../../Domains/Entities/Users/RegisterUser"
 import prismaClient from "../../Infrastructures/Database/Prisma/PostgreSQL/PrismaClient"
+import bcrypt from 'bcrypt';
 
 const databaseHelper = {
     async createUser (payload: RegisterUser) {
@@ -25,6 +26,38 @@ const databaseHelper = {
             },
         });
         
+        return newUser;
+    },
+    async createUserWithEncryptedPassword(payload: RegisterUser) {
+        const {password} = payload;
+        const encryptedPassword = await bcrypt.hash(password, 10);
+        const newUser = await prismaClient.user.create({
+            data: {
+                id: 'user-123',
+                name: payload.name,
+                nik: '123456',
+                password: encryptedPassword,
+                username: 'ripanrenaldi',
+                userRole: {
+                    connectOrCreate: {
+                        where: {
+                            role: 'user'
+                        },
+                        create: {
+                            role: 'user'
+                        }
+                    }
+                }
+            },
+            include: {
+                userRole: {
+                    select: {
+                        role: true
+                    }
+                }
+            }
+        });
+
         return newUser;
     },
     async findUserById(id: string){

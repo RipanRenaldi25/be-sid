@@ -31,10 +31,11 @@ describe('Login Use Case', () => {
 
         // mock function
         userRepository.checkUserOnDatabase = jest.fn().mockImplementation(() => Promise.resolve);
-        userRepository.login = jest.fn().mockImplementation(() => Promise.resolve({
+        userRepository.login = jest.fn().mockImplementation(() => Promise.resolve);
+        userRepository.getUserByUsername = jest.fn().mockImplementation(() => Promise.resolve({
             id: mockRegisteredUser.id,
             name: mockRegisteredUser.name,
-            username: mockRegisteredUser.name,
+            username: mockRegisteredUser.username,
             role: mockRegisteredUser.role,
         }));
         tokenGenerator.generateToken = jest.fn().mockImplementation(() => '123123');
@@ -47,12 +48,15 @@ describe('Login Use Case', () => {
             username: payload.username,
             role: mockRegisteredUser.role
         }, secretToken);
-        expect(userLogedIn).toStrictEqual(new UserLogedIn({
+        expect(userLogedIn).toEqual({
             id: mockRegisteredUser.id,
             name: mockRegisteredUser.name,
             role: mockRegisteredUser.role,
-            token: '123123'
-        }));
+            username: payload.username,
+            token: '123123',
+
+            
+        })
 
     })
 })
