@@ -1,15 +1,19 @@
-import { Express, Router } from 'express';
+import express from 'express';
+import container from '../../../Infrastructures/Container/ServicesContainer';
 
-const routes = (app: Express, routerApp: Router, ...midlewares: any) => {
-    const router = routerApp;
-    
-    app.get('/', (req, res) => {
+type MidlewareParameterType = {
+    name: string,
+    midlewares: express.RequestHandler
+}
+
+const routes = (express: any, app: express.Express, midlewares?: MidlewareParameterType[]) => {
+    const router = express.Router();
+    app.get('/', (req: express.Request, res: express.Response) => {
         res.json({
             status: 'success',
             message: 'SID Document Management API'
         });
     });
-    
     app.use(router);
 
     return app;
