@@ -1,5 +1,4 @@
 import express from 'express';
-import container from '../../../Infrastructures/Container/ServicesContainer';
 
 type MidlewareParameterType = {
     name: string,
