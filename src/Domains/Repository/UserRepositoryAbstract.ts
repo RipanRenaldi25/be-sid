@@ -14,6 +14,9 @@ class UserRepositoryAbstract {
     async verifyAvailableUsername(username: string): Promise<void> {
         throw new Error('ABSTRACT_CLASS.METHOD_NOT_IMPLEMENTED')
     };
+    async checkUserOnDatabase(username: string): Promise<boolean> {
+        throw new Error('ABSTRACT_CLASS.METHOD_NOT_IMPLEMENTED')
+    }
 }
 
 export default UserRepositoryAbstract;

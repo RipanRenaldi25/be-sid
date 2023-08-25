@@ -15,6 +15,6 @@ describe('User Repository Abstract', () => {
         expect(() => UserRepository.login({username: 'ripanrenaldi', password: 'rahasia'})).rejects.toThrowError('ABSTRACT_CLASS.METHOD_NOT_IMPLEMENTED')
         expect(() => UserRepository.register(new RegisterUser({username: 'ripanrenaldi', password: 'rahasia', name: 'ripanrenaldi', role: 'admin', nik: '123123'}))).rejects.toThrowError('ABSTRACT_CLASS.METHOD_NOT_IMPLEMENTED')
         expect(() => UserRepository.verifyAvailableUsername('asd')).rejects.toThrowError('ABSTRACT_CLASS.METHOD_NOT_IMPLEMENTED')
+        expect(() => UserRepository.checkUserOnDatabase('')).rejects.toThrowError('ABSTRACT_CLASS.METHOD_NOT_IMPLEMENTED');
     })
-
 })
