@@ -5,12 +5,12 @@ import UserLogedIn from '../../Entities/Users/UserLogedIn';
 import UserRepositoryAbstract from '../UserRepositoryAbstract';
 
 /**
- * it should return awaited value when register user
+ * it should throw error when invoke function
  */
 
 
 describe('User Repository Abstract', () => {
-    it('it should return awaited value when register user', () => {
+    it('it should throw error when invoke function', () => {
         const UserRepository = new UserRepositoryAbstract();
         expect(() => UserRepository.login({username: 'ripanrenaldi', password: 'rahasia'})).rejects.toThrowError('ABSTRACT_CLASS.METHOD_NOT_IMPLEMENTED')
         expect(() => UserRepository.register(new RegisterUser({username: 'ripanrenaldi', password: 'rahasia', name: 'ripanrenaldi', role: 'admin', nik: '123123'}))).rejects.toThrowError('ABSTRACT_CLASS.METHOD_NOT_IMPLEMENTED')
