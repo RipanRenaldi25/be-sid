@@ -4,6 +4,7 @@ import RegisterUser from '../../../Domains/Entities/Users/RegisterUser';
 import prismaClient from '../../Database/Prisma/PostgreSQL/PrismaClient';
 import InvariantError from '../../../Commons/Exceptions/InvariantError';
 import RegisteredUser from '../../../Domains/Entities/Users/RegisteredUser';
+import NotFoundError from '../../../Commons/Exceptions/NotFoundError';
 
 /**
  * it should throw error when username is not available in database
@@ -83,5 +84,31 @@ describe('User Repository Concrete', () => {
             expect(registeredUser).toHaveProperty('username');
         })
     })
-    
+    describe('Check User On Database', () => {
+        it('Should throw when user is not found in database', async () => {
+            const payload = {
+                username: 'ripanrenaldi',
+                password: 'rahasia',
+                role: 'admin',
+                name: 'ripan renaldi',
+                nik: '3273285902391'
+            };
+            const userRepository = new UserRepositoryConcrete({prisma: prismaClient, idGenerator: () => {}});
+            await expect(userRepository.checkUserOnDatabase(payload.username)).rejects.toThrowError(NotFoundError);
+        })
+        it('Should return true when username is found', async () => {
+            const payload = {
+                username: 'ripanrenaldi',
+                password: 'rahasia',
+                role: 'admin',
+                name: 'ripan renaldi',
+                nik: '3273285902391'
+            };
+            const userToRegister = new RegisterUser(payload);
+            const userRepository = new UserRepositoryConcrete({prisma: prismaClient, idGenerator: () => {}});
+            await databaseHelper.createUser(userToRegister);
+            const isUserExists = await userRepository.checkUserOnDatabase(payload.username);
+            expect(isUserExists).toBe(true);
+        })
+    })
 })

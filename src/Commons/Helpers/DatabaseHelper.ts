@@ -2,7 +2,6 @@
 
 import RegisterUser from "../../Domains/Entities/Users/RegisterUser"
 import prismaClient from "../../Infrastructures/Database/Prisma/PostgreSQL/PrismaClient"
-import dotenv from 'dotenv';
 
 const databaseHelper = {
     async createUser (payload: RegisterUser) {
@@ -38,6 +37,15 @@ const databaseHelper = {
                 userRole: true,
             }
         })
+        return user;
+    },
+
+    async findUserByUsername(username: string) {
+        const user = await prismaClient.user.findUnique({
+            where: {
+                username
+            }
+        });
         return user;
     },
     async cleanAllData(){

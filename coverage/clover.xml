@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1692961388023" clover="3.2.0">
-  <project timestamp="1692961388023" name="All files">
-    <metrics statements="139" coveredstatements="137" conditionals="5" coveredconditionals="4" methods="44" coveredmethods="43" elements="188" coveredelements="184" complexity="0" loc="139" ncloc="139" packages="14" files="19" classes="19"/>
+<coverage generated="1692962402326" clover="3.2.0">
+  <project timestamp="1692962402326" name="All files">
+    <metrics statements="147" coveredstatements="145" conditionals="6" coveredconditionals="5" methods="46" coveredmethods="45" elements="199" coveredelements="195" complexity="0" loc="147" ncloc="147" packages="14" files="20" classes="20"/>
     <package name="Applications.Security">
       <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="TokenGeneratorAbstract.ts" path="D:\project\SID\app\be_baru\src\Applications\Security\TokenGeneratorAbstract.ts">
@@ -39,7 +39,7 @@
       </file>
     </package>
     <package name="Commons.Exceptions">
-      <metrics statements="4" coveredstatements="4" conditionals="1" coveredconditionals="1" methods="1" coveredmethods="1"/>
+      <metrics statements="7" coveredstatements="7" conditionals="1" coveredconditionals="1" methods="2" coveredmethods="2"/>
       <file name="InvariantError.ts" path="D:\project\SID\app\be_baru\src\Commons\Exceptions\InvariantError.ts">
         <metrics statements="4" coveredstatements="4" conditionals="1" coveredconditionals="1" methods="1" coveredmethods="1"/>
         <line num="1" count="9" type="stmt"/>
@@ -47,13 +47,19 @@
         <line num="6" count="8" type="stmt"/>
         <line num="10" count="9" type="stmt"/>
       </file>
+      <file name="NotFoundError.ts" path="D:\project\SID\app\be_baru\src\Commons\Exceptions\NotFoundError.ts">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="9" count="3" type="stmt"/>
+      </file>
     </package>
     <package name="Domains.Entities.Users">
       <metrics statements="28" coveredstatements="28" conditionals="0" coveredconditionals="0" methods="14" coveredmethods="14"/>
       <file name="RegisterUser.ts" path="D:\project\SID\app\be_baru\src\Domains\Entities\Users\RegisterUser.ts">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="2" count="5" type="stmt"/>
-        <line num="8" count="16" type="stmt"/>
+        <line num="8" count="17" type="stmt"/>
         <line num="12" count="5" type="stmt"/>
       </file>
       <file name="RegisteredUser.ts" path="D:\project\SID\app\be_baru\src\Domains\Entities\Users\RegisteredUser.ts">
@@ -94,15 +100,15 @@
         <metrics statements="19" coveredstatements="19" conditionals="0" coveredconditionals="0" methods="11" coveredmethods="11"/>
         <line num="2" count="5" type="stmt"/>
         <line num="3" count="5" type="stmt"/>
-        <line num="14" count="16" type="stmt"/>
-        <line num="15" count="13" type="stmt"/>
-        <line num="16" count="13" type="stmt"/>
-        <line num="17" count="13" type="stmt"/>
-        <line num="18" count="13" type="stmt"/>
-        <line num="19" count="13" type="stmt"/>
-        <line num="31" count="15" type="stmt"/>
+        <line num="14" count="17" type="stmt"/>
+        <line num="15" count="14" type="stmt"/>
+        <line num="16" count="14" type="stmt"/>
+        <line num="17" count="14" type="stmt"/>
+        <line num="18" count="14" type="stmt"/>
+        <line num="19" count="14" type="stmt"/>
+        <line num="31" count="17" type="stmt"/>
         <line num="35" count="1" type="stmt"/>
-        <line num="39" count="9" type="stmt"/>
+        <line num="39" count="10" type="stmt"/>
         <line num="43" count="1" type="stmt"/>
         <line num="47" count="11" type="stmt"/>
         <line num="51" count="1" type="stmt"/>
@@ -182,23 +188,28 @@
       </file>
     </package>
     <package name="Infrastructures.Repository">
-      <metrics statements="14" coveredstatements="14" conditionals="1" coveredconditionals="1" methods="3" coveredmethods="3"/>
+      <metrics statements="19" coveredstatements="19" conditionals="2" coveredconditionals="2" methods="4" coveredmethods="4"/>
       <file name="UserRepositoryConcrete.ts" path="D:\project\SID\app\be_baru\src\Infrastructures\Repository\UserRepositoryConcrete.ts">
-        <metrics statements="14" coveredstatements="14" conditionals="1" coveredconditionals="1" methods="3" coveredmethods="3"/>
+        <metrics statements="19" coveredstatements="19" conditionals="2" coveredconditionals="2" methods="4" coveredmethods="4"/>
         <line num="1" count="2" type="stmt"/>
-        <line num="3" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
         <line num="4" count="2" type="stmt"/>
-        <line num="12" count="5" type="stmt"/>
-        <line num="13" count="5" type="stmt"/>
-        <line num="14" count="5" type="stmt"/>
-        <line num="18" count="5" type="stmt"/>
-        <line num="23" count="5" type="cond" truecount="1" falsecount="0"/>
-        <line num="24" count="2" type="stmt"/>
-        <line num="29" count="4" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="13" count="7" type="stmt"/>
+        <line num="14" count="7" type="stmt"/>
+        <line num="15" count="7" type="stmt"/>
+        <line num="19" count="5" type="stmt"/>
+        <line num="24" count="5" type="cond" truecount="1" falsecount="0"/>
+        <line num="25" count="2" type="stmt"/>
         <line num="30" count="4" type="stmt"/>
         <line num="31" count="4" type="stmt"/>
-        <line num="51" count="4" type="stmt"/>
+        <line num="32" count="4" type="stmt"/>
+        <line num="52" count="4" type="stmt"/>
         <line num="56" count="2" type="stmt"/>
+        <line num="61" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="69" count="2" type="stmt"/>
       </file>
     </package>
     <package name="Infrastructures.Security.Hash">

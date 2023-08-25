@@ -1,4 +1,5 @@
 import InvariantError from "../../Commons/Exceptions/InvariantError";
+import NotFoundError from "../../Commons/Exceptions/NotFoundError";
 import RegisterUser from "../../Domains/Entities/Users/RegisterUser";
 import RegisteredUser from "../../Domains/Entities/Users/RegisteredUser";
 import UserRepositoryAbstract from "../../Domains/Repository/UserRepositoryAbstract";
@@ -49,6 +50,18 @@ class UserRepositoryConcrete extends UserRepositoryAbstract {
         })
 
         return new RegisteredUser({...newUser});
+    }
+
+    async checkUserOnDatabase(username: string): Promise<boolean> {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                username
+            }
+        });
+        if(!user){
+            throw new NotFoundError('Username tidak ditemukan');
+        }
+        return true;
     }
 
 }
