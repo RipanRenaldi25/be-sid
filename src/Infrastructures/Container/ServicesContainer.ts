@@ -15,7 +15,7 @@ import prismaClient from '../Database/Prisma/PostgreSQL/PrismaClient';
 import { v4 } from 'uuid';
 
 // USE CASE
-import RegisterUseCase from '../../Applications/RegisterUsecase';
+import RegisterUseCase from '../../Applications/Usecase/RegisterUsecase';
 
 const container = new Container();
 

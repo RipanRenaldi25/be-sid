@@ -11,6 +11,7 @@ class RegisteredUser implements RegisteredUserType {
     private _id;
     private _username;
     private _name;
+    public role?: string
 
     constructor({id, username, name}: RegisteredUserType) {
         this._id = id;

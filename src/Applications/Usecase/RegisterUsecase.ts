@@ -1,8 +1,8 @@
-import IUser from "../Domains/Entities/Users/Interface/UserInterface";
-import RegisterUser from "../Domains/Entities/Users/RegisterUser";
-import RegisteredUser from "../Domains/Entities/Users/RegisteredUser";
-import UserRepositoryAbstract from "../Domains/Repository/UserRepositoryAbstract";
-import PasswordHashAbstract from "./Security/PasswordHash";
+import IUser from "../../Domains/Entities/Users/Interface/UserInterface";
+import RegisterUser from "../../Domains/Entities/Users/RegisterUser";
+import RegisteredUser from "../../Domains/Entities/Users/RegisteredUser";
+import UserRepositoryAbstract from "../../Domains/Repository/UserRepositoryAbstract";
+import PasswordHashAbstract from "../Security/PasswordHash";
 
 class RegisterUseCase {
     userRepository: UserRepositoryAbstract;

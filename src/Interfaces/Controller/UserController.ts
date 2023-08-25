@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 import ClientError from '../../Commons/Exceptions/ClientError';
-import RegisterUseCase from '../../Applications/RegisterUsecase';
+import RegisterUseCase from '../../Applications/Usecase/RegisterUsecase';
 import container from '../../Infrastructures/Container/ServicesContainer';
 
 class UserController {

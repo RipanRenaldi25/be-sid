@@ -6,7 +6,7 @@ import createServer from '../../../../../Infrastructures/Http/Express/CreateServ
 import databaseHelper from '../../../../../Commons/Helpers/DatabaseHelper';
 import RegisterUser from '../../../../../Domains/Entities/Users/RegisterUser';
 import container from '../../../../../Infrastructures/Container/ServicesContainer';
-import RegisterUseCase from '../../../../../Applications/RegisterUsecase';
+import RegisterUseCase from '../../../../../Applications/Usecase/RegisterUsecase';
 
 /**
  * Test case
