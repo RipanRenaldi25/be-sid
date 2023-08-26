@@ -34,7 +34,7 @@ model Role {
 
 model Authentication {
   user_id String @id @db.VarChar(100)
-  token   String @unique @db.VarChar(150)
+  token   String @unique @db.VarChar(255)
   user    User   @relation(fields: [user_id], references: [id])
 
   @@map("authentications")

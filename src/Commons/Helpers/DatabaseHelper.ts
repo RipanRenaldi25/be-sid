@@ -3,6 +3,8 @@
 import RegisterUser from "../../Domains/Entities/Users/RegisterUser"
 import prismaClient from "../../Infrastructures/Database/Prisma/PostgreSQL/PrismaClient"
 import bcrypt from 'bcrypt';
+import UnauthorizeError from "../Exceptions/UnauthorizeError";
+import NotFoundError from "../Exceptions/NotFoundError";
 
 const databaseHelper = {
     async createUser (payload: RegisterUser) {
@@ -77,6 +79,10 @@ const databaseHelper = {
         const user = await prismaClient.user.findUnique({
             where: {
                 username
+            },
+            include: {
+                authentication: true,
+                userRole: true
             }
         });
         return user;
@@ -84,7 +90,25 @@ const databaseHelper = {
     async cleanAllData(){
         await prismaClient.$queryRaw`TRUNCATE TABLE users CASCADE`;
         await prismaClient.$queryRaw`TRUNCATE TABLE roles CASCADE`;
-    }
+    },
+    async insertTokenToSpecificUser (token: string, userId: string) {
+        const user = await prismaClient.user.update({
+            data: {
+                authentication: {
+                    create: {
+                        token
+                    }
+                }
+            },
+            where: {
+                id: userId
+            }
+        });
+        if(!!!user) {
+            throw new NotFoundError('User tidak tersedia di database');
+        }
+        return !!user;
+    },
 }
 
 export default databaseHelper;

@@ -49,11 +49,12 @@ class UserController {
                     status: 'fail',
                     message: 'Username atau password salah'
                 });
-                return;
+            }else{
+                res.status(500).json({
+                    status: 'fail',
+                    message: `SERVER ERROR : ${err.message}`
+                })
             }
-            res.status(500).json({
-                status: 'fail',
-            })
         }
 
     }

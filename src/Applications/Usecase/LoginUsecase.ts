@@ -21,6 +21,12 @@ class LoginUsecase {
             role: user!.role,
             username,
         }, process.env.SECRET_TOKEN! || 'TOKEN_RAHASIA');
+        const refreshToken = this.tokenGenerator.generateRefreshToken({
+            id: user!.id,
+            role: user!.role,
+            username,
+        }, 3, process.env.SECRET_REFRESH_TOKEN! || 'REFRESH_TOKEN_RAHASIA');
+        await this.userRepository.insertRefreshToken(refreshToken, user!.id);
         const returnedUser: Pick<UserLogedIn, 'id' | 'name' | 'role' | 'token'> & {
             username: string
         } = {

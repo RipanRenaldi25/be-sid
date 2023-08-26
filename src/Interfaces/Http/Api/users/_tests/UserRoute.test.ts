@@ -29,7 +29,8 @@ class PasswordHash extends PasswordHashAbstract {
 
 describe('/users', () => {
     let app: express.Express = createServer();
-    beforeAll(() => {
+    beforeAll(async () => {
+        await databaseHelper.cleanAllData();
         app.use(express.json());
         app.use('/users', userRoutes(express, UserController));
     })

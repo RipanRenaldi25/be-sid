@@ -95,6 +95,25 @@ class UserRepositoryConcrete extends UserRepositoryAbstract {
         };
     }
 
+    async insertRefreshToken(token: string, userId: string): Promise<void> {
+        try{
+            const user = await this.prisma.user.update({
+                data: {
+                    authentication: {
+                        create: {
+                            token
+                        }
+                    }
+                },
+                where: {
+                    id: userId
+                }
+            });
+        }catch(e: any){
+            throw new NotFoundError(e.message);
+
+        }
+    }
 
 
 }

@@ -31,6 +31,9 @@ class UserRepositoryAbstract {
     async getUserByUsername(username: string): Promise<UserWithRoleType | null> {
         throw new Error('ABSTRACT_CLASS.METHOD_NOT_IMPLEMENTED');
     }
+    async insertRefreshToken(token: string, userId: string): Promise<void>{
+        throw new Error('USER_REPOSITORY.INSERT_REFRESH_TOKEN_METHOD_NOT_IMPLEMENTED');
+    }
 }
 
 export default UserRepositoryAbstract;

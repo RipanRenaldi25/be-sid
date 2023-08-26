@@ -8,6 +8,9 @@ class TokenGeneratorConcrete extends TokenGeneratorAbstract {
     generateToken() {
         return '123';
     }
+    generateRefreshToken(payload: { id: string; username: string; role: string; }, expireInHour: number, secretToken: string): string {
+        return 'asd';
+    }
 }
 
 describe('Login Use Case', () => {
@@ -31,6 +34,7 @@ describe('Login Use Case', () => {
 
         // mock function
         userRepository.checkUserOnDatabase = jest.fn().mockImplementation(() => Promise.resolve);
+        userRepository.insertRefreshToken = jest.fn().mockImplementation(() => Promise.resolve);
         userRepository.login = jest.fn().mockImplementation(() => Promise.resolve);
         userRepository.getUserByUsername = jest.fn().mockImplementation(() => Promise.resolve({
             id: mockRegisteredUser.id,
@@ -39,9 +43,11 @@ describe('Login Use Case', () => {
             role: mockRegisteredUser.role,
         }));
         tokenGenerator.generateToken = jest.fn().mockImplementation(() => '123123');
+        tokenGenerator.generateRefreshToken = jest.fn().mockImplementation(() => 'REFRESH_TOKEN');
         const userLogedIn = await LoginUsecase.execute(payload);
 
         expect(userRepository.checkUserOnDatabase).toHaveBeenCalledWith(payload.username);
+        expect(userRepository.insertRefreshToken).toHaveBeenCalledWith('REFRESH_TOKEN', mockRegisteredUser.id);
         expect(userRepository.login).toHaveBeenCalledWith(payload);
         expect(tokenGenerator.generateToken).toHaveBeenCalledWith({
             id: 'user-123',
@@ -54,8 +60,6 @@ describe('Login Use Case', () => {
             role: mockRegisteredUser.role,
             username: payload.username,
             token: '123123',
-
-            
         })
 
     })

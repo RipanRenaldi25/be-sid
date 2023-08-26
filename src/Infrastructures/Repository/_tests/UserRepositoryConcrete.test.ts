@@ -24,7 +24,7 @@ class PasswordHash extends PasswordHashAbstract {
 
 describe('User Repository Concrete', () => {
     let passwordService = new PasswordHash();
-    beforeEach(async () => {
+    afterEach(async () => {
         await databaseHelper.cleanAllData();
     })
     afterAll(async () => {
@@ -60,11 +60,11 @@ describe('User Repository Concrete', () => {
     describe('register', () => {
         it('Should create new user on database', async () => {
             const payload = {
-                username: 'ripanrenaldi',
+                username: 'ripanrenaldibaru',
                 password: 'rahasia',
                 role: 'admin',
                 name: 'ripan renaldi',
-                nik: '3273285902391'
+                nik: '327328594023912'
             };
 
             const userRepository = new UserRepositoryConcrete({prisma: prismaClient, idGenerator: () => '321', passwordService});
@@ -106,21 +106,25 @@ describe('User Repository Concrete', () => {
                 nik: '3273285902391'
             };
             const userRepository = new UserRepositoryConcrete({prisma: prismaClient, idGenerator: () => {}, passwordService});
-            await expect(userRepository.checkUserOnDatabase(payload.username)).rejects.toThrowError(NotFoundError);
+            await expect(() => userRepository.checkUserOnDatabase(payload.username)).rejects.toThrowError(NotFoundError);
         })
         it('Should return true when username is found', async () => {
             const payload = {
-                username: 'ripanrenaldi',
+                username: 'username',
                 password: 'rahasia',
                 role: 'admin',
                 name: 'ripan renaldi',
                 nik: '3273285902391'
             };
+
             const userToRegister = new RegisterUser(payload);
-            const userRepository = new UserRepositoryConcrete({prisma: prismaClient, idGenerator: () => {}, passwordService});
-            await databaseHelper.createUser(userToRegister);
-            const isUserExists = await userRepository.checkUserOnDatabase(payload.username);
-            expect(isUserExists).toBe(true);
+            const user = await databaseHelper.createUser(userToRegister);
+            const userRepository = new UserRepositoryConcrete({prisma: prismaClient, idGenerator: () => {}, passwordService})
+
+            const isExists = await userRepository.checkUserOnDatabase(user.username);
+
+            expect(user).toBeDefined();
+            expect(isExists).toBe(true);
         })
     })
     describe('get user by username', () => {
@@ -174,6 +178,34 @@ describe('User Repository Concrete', () => {
             const userRepository = new UserRepositoryConcrete({prisma: prismaClient, idGenerator: () => {}, passwordService});
 
             await expect(userRepository.login({...payload})).resolves.not.toThrowError(UnauthorizeError);
+        })
+    })
+
+    describe('Insert Refresh Token', () => {
+        it('Should insert token to database correctly', async () => {
+            const userRepository = new UserRepositoryConcrete({prisma: prismaClient, idGenerator: () => {}, passwordService})
+            const payload = {
+                username: 'ripanrenaldi4',
+                password: 'rahasia',
+                role: 'admin',
+                name: 'ripan renaldi',
+                nik: '3273285902391'
+            };
+            const userToRegister = new RegisterUser(payload);
+            const user = await databaseHelper.createUser(userToRegister);
+
+            await userRepository.insertRefreshToken('asdsa', user.id);
+
+            // get user by username
+            const userOnDatabase = await databaseHelper.findUserByUsername(user.username);
+            expect(userOnDatabase!.authentication!.token).toBeDefined();
+            expect(userOnDatabase!.authentication!.token).toBe('asdsa');
+        })
+        it('Should throw error when insert token is failed because user is not exists', async () => {
+            const userRepository = new UserRepositoryConcrete({prisma: prismaClient, idGenerator: () => {}, passwordService})
+
+
+            await expect(() => userRepository.insertRefreshToken('asd', 'user-not-found')).rejects.toThrowError(NotFoundError);
         })
     })
 })
