@@ -20,11 +20,16 @@ class UserController {
                 }
             });
 
-        }catch(err){
+        }catch(err: any){
             if(err instanceof ClientError){
                 res.status(err.statusCode).json({
                     status: 'fail',
                     message: err.message
+                })
+            }else {
+                res.status(500).json({
+                    status: 'fail',
+                    message: `Server error ${err.message}`
                 })
             }
         }
@@ -40,7 +45,8 @@ class UserController {
                 status: 'success',
                 message: 'berhasil login',
                 data: {
-                    accessToken: user.token
+                    accessToken: user.token,
+                    refreshToken: user.refreshToken
                 }
             });
         }catch(err: any){

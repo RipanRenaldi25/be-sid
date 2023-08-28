@@ -15,8 +15,8 @@ class PasswordHashConcrete extends PasswordHashAbstract {
         const newPassword = await this.bcrypt.hash(password, this.saltRound);
         return newPassword; 
     }
-    comparePassword(password: string, passwordHashed: string): Promise<boolean> {
-        const isMatch = this.bcrypt.compare(password, passwordHashed)
+    async comparePassword(password: string, passwordHashed: string): Promise<boolean> {
+        const isMatch = await this.bcrypt.compare(password, passwordHashed)
         if(!isMatch){
             throw new UnauthorizeError('Username atau password salah');
         }

@@ -38,28 +38,28 @@ describe('/users', () => {
         await databaseHelper.cleanAllData();
     })
     describe('/register', () => {
+        beforeEach(async () => {
+            await databaseHelper.cleanAllData();
+        })
         it('Should return 400 when username is not available in database', async () => {
             const payload = {
                 username: 'ripanrenaldi',
                 password: 'rahasia',
                 role: 'user',
                 name: 'ripan renaldi',
-                nik: '273282504020002'
+                nik: '32732825040200021'
             };
-            
             const registerUser = new RegisterUser(payload);
             await databaseHelper.createUser(registerUser);
 
             const response = await request(app).post('/users/register').send(payload).set('Accept', 'application/json');
-
-            console.log('before request');
             
             expect(response.statusCode).toBe(400);
         })
         it('Should return 201 when user register is succeed', async () => {
             // username, passsworld, role, name, nik
         const response = await request(app).post('/users/register').send({
-                username: 'ripanrenaldi',
+                username: 'ripanrenaldi33',
                 password: 'rahasia',
                 role: 'user',
                 name: 'ripan renaldi',
@@ -81,7 +81,7 @@ describe('/users', () => {
         });
         it('Should return response property with correct property (id, name, username)', async () => {
             const response = await request(app).post('/users/register').send({
-                username: 'ripanrenaldi',
+                username: 'ripanrenaldi33',
                 password: 'rahasia',
                 role: 'user',
                 name: 'ripan renaldi',
@@ -92,12 +92,15 @@ describe('/users', () => {
             expect(response.body.message).toBe('berhasil membuat user');
             expect(response.body.status).toBe('success');
             expect(response.body.data.id).toBeDefined();
-            expect(response.body.data.username).toBe('ripanrenaldi');
+            expect(response.body.data.username).toBe('ripanrenaldi33');
             expect(response.body.data.name).toBe('ripan renaldi');
         });
 
     })
     describe('/login', () => {
+        beforeEach(async () => {
+            await databaseHelper.cleanAllData();
+        })
         it('Should be able to throw unauthorize error when username or password is incorrect', async () => {
             const payload = {
                 username: 'ripanrenaldi',
@@ -151,3 +154,7 @@ describe('/users', () => {
         })
     })
 })
+
+// it('asd', () => {
+//     expect(true).toBeTruthy();
+// })

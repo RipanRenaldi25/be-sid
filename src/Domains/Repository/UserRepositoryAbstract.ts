@@ -34,6 +34,10 @@ class UserRepositoryAbstract {
     async insertRefreshToken(token: string, userId: string): Promise<void>{
         throw new Error('USER_REPOSITORY.INSERT_REFRESH_TOKEN_METHOD_NOT_IMPLEMENTED');
     }
+    async deleteUserTokenIfExists (username: string): Promise<boolean> {
+        throw new Error('USER_REPOSITORY.DELETE_USER_TOKEN_IF_EXISTS_METHOD_NOT_IMPLEMENTED');
+    }
+    
 }
 
 export default UserRepositoryAbstract;

@@ -1,4 +1,5 @@
 import TokenGeneratorAbstract from "../../../Applications/Security/TokenGeneratorAbstract";
+import ForbiddenError from "../../../Commons/Exceptions/ForbiddenError";
 
 class TokenGeneratorConcrete extends TokenGeneratorAbstract {
     jwt: any
@@ -30,6 +31,14 @@ class TokenGeneratorConcrete extends TokenGeneratorAbstract {
         const refreshToken = this.generateToken(payload, secretToken, expiresInHour);
 
         return refreshToken;
+    }
+
+    checkExpireOfRefreshToken(refreshToken: string, secretToken: string): void {
+        try{
+            this.jwt.verify(refreshToken, secretToken);
+        }catch(err: any) {
+            throw new ForbiddenError(err.message);
+        }
     }
     
 }

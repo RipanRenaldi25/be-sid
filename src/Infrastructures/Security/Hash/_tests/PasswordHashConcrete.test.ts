@@ -1,3 +1,4 @@
+import UnauthorizeError from '../../../../Commons/Exceptions/UnauthorizeError';
 import PasswordHashConcrete from '../PasswordHashConcrete';
 import bcrypt from 'bcrypt';
 
@@ -21,5 +22,12 @@ describe('Password Hash Concrete', () => {
 
         expect(passwordHash.comparePassword).toHaveBeenCalledWith(password, 'asdasd');
         await expect(passwordHash.comparePassword).toHaveBeenCalledTimes(1);
+    })
+    it('Should throw unauthorize error when password is not match', async () => {
+        const passwordHash = new PasswordHashConcrete(bcrypt);
+        const password = 'rahasia2';
+        const encryptedPassword = await bcrypt.hash('password', 10);
+
+        await expect(() => passwordHash.comparePassword(password, encryptedPassword)).rejects.toThrowError(UnauthorizeError);
     })
 });

@@ -15,5 +15,6 @@ describe('User Repository Abstract', () => {
         expect(() => UserRepository.checkUserOnDatabase('')).rejects.toThrowError('ABSTRACT_CLASS.METHOD_NOT_IMPLEMENTED');
         expect(() => UserRepository.getUserByUsername('')).rejects.toThrowError('ABSTRACT_CLASS.METHOD_NOT_IMPLEMENTED');
         expect(() => UserRepository.insertRefreshToken('asd', 'user-123')).rejects.toThrowError('USER_REPOSITORY.INSERT_REFRESH_TOKEN_METHOD_NOT_IMPLEMENTED');
+        expect(() => UserRepository.deleteUserTokenIfExists('asd')).rejects.toThrowError('USER_REPOSITORY.DELETE_USER_TOKEN_IF_EXISTS_METHOD_NOT_IMPLEMENTED');
     })
 })

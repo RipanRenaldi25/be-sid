@@ -70,6 +70,7 @@ const databaseHelper = {
             include: {
                 authentication: true,
                 userRole: true,
+                document: true
             }
         })
         return user;
@@ -82,7 +83,8 @@ const databaseHelper = {
             },
             include: {
                 authentication: true,
-                userRole: true
+                userRole: true,
+                document: true
             }
         });
         return user;
@@ -108,7 +110,7 @@ const databaseHelper = {
             throw new NotFoundError('User tidak tersedia di database');
         }
         return !!user;
-    },
+    }
 }
 
 export default databaseHelper;

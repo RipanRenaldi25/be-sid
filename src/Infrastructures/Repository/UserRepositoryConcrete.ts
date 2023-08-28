@@ -27,7 +27,7 @@ class UserRepositoryConcrete extends UserRepositoryAbstract {
                 username
             }
         });
-        if(!!user){
+        if(user){
             throw new InvariantError('Username sudah digunakan', 400);
         };
     }
@@ -80,15 +80,49 @@ class UserRepositoryConcrete extends UserRepositoryAbstract {
                     select: {
                         role: true
                     }
-                }
+                },
+                authentication: true
             }
         });
         return user;
     }
+    
+    async getUserToken (username: string) {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                username
+            },
+            include: {
+                authentication: {
+                    select: {
+                        token: true
+                    }
+                }
+            }
+        });
+
+        return user;
+    }
+
+    async deleteUserTokenIfExists(username: string): Promise<boolean> {
+        const user = await this.getUserToken(username);
+        if(user?.authentication){
+            console.log({auth: user.authentication});
+            await this.prisma.authentication.delete({
+                where: {
+                    user_id: user.id
+                }
+            });
+            return true;
+        }
+        return false;
+    }
 
     async login(payload: Pick<IUser, "username" | "password">): Promise<any> {
         const {username, password} = payload;
+        await this.deleteUserTokenIfExists(username);
         const user = await this.getUserByUsername(username);
+
         const isMatch = await this.passwordService.comparePassword(password, user!.password);
         if(!isMatch){
             throw new UnauthorizeError('Username atau password salah');

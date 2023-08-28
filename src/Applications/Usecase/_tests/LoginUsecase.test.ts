@@ -11,6 +11,9 @@ class TokenGeneratorConcrete extends TokenGeneratorAbstract {
     generateRefreshToken(payload: { id: string; username: string; role: string; }, expireInHour: number, secretToken: string): string {
         return 'asd';
     }
+    checkExpireOfRefreshToken(refreshToken: string): void {
+        throw new Error();
+    }
 }
 
 describe('Login Use Case', () => {
@@ -42,6 +45,7 @@ describe('Login Use Case', () => {
             username: mockRegisteredUser.username,
             role: mockRegisteredUser.role,
         }));
+        userRepository.deleteUserTokenIfExists = jest.fn().mockImplementation(() => Promise.resolve(true));
         tokenGenerator.generateToken = jest.fn().mockImplementation(() => '123123');
         tokenGenerator.generateRefreshToken = jest.fn().mockImplementation(() => 'REFRESH_TOKEN');
         const userLogedIn = await LoginUsecase.execute(payload);
@@ -60,6 +64,7 @@ describe('Login Use Case', () => {
             role: mockRegisteredUser.role,
             username: payload.username,
             token: '123123',
+            refreshToken: 'REFRESH_TOKEN'
         })
 
     })
