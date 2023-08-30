@@ -16,11 +16,11 @@ const init = () => {
     const app = routes(express, createServer());
     app.use(express.json());
     app.use(express.urlencoded({extended: false}));
-    app.use(cors());
+    app.use(cors())
     app.use('/upload', express.static('upload'));
     app.use('/users', userRoutes(express, UserController));
     app.use('/authentications', authenticationRoute(express, AuthenticationController));
-    app.use('/documents',authenticationMidleware, documentRoutes(express, DocumentController));
+    app.use('/documents', authenticationMidleware, documentRoutes(express, DocumentController));
     app.listen(3001, () => {
         console.log(`SERVER RUNNING ON PORT ${3001}`);
     });

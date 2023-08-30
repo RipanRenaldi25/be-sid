@@ -9,7 +9,7 @@ import Zipper from "adm-zip";
 import { v4 } from "uuid";
 import fs from 'fs-extra';
 import NotFoundError from "../../Commons/Exceptions/NotFoundError";
-import path from 'path';
+import p from 'path';
 const documentRepository = new DocumentRepository({prisma: prismaClient, idGenerator: v4});
 
 export type DocumentType = {
@@ -96,8 +96,7 @@ class DocumentController {
             if(!fs.existsSync(`upload/${path}`)){
                 throw new NotFoundError('Document not found');
             };
-            res.download(`upload/${path}`);
-            res.setHeader('Content-disposition', 'filename=1693398592450-bg-2.jpg');
+            res.download(p.resolve(`upload/${path}`));
         }catch(err: any){
             if(err instanceof ClientError){
                 res.status(err.statusCode).json({
@@ -115,25 +114,22 @@ class DocumentController {
 
     static downloadMultipleDocument (req: express.Request, res: express.Response) {
         try{
-            // const paths: string[] = req.body.paths;            
-            // const isDocumentExists = paths.every(path => {
-            //     return fs.existsSync(`upload/${path}`);
-            // });
-            // if(!isDocumentExists) {
-            //     throw new NotFoundError('Some documment not exists');
-            // }
-            // const zip = new Zipper();
-            // for(let documentPath of paths){
-            //     const filePath = `upload/${documentPath}`;
-            //     zip.addLocalFile(filePath);
-            // }
-            // const fileName = `test`;
-            // const outDirZip = `compress/${fileName}`;
-            // zip.writeZip(`${outDirZip}.zip`);
-            // console.log('downloaded');
-            console.log(fs.existsSync('upload/1693398592450-bg-2.jpg'))
-            res.setHeader('Content-disposition', 'attachment; filename=1693398592450-bg-2.jpg');
-            res.download('upload/1693398592450-bg-2.jpg');
+            const paths: string[] = req.body.paths;            
+            const isDocumentExists = paths.every(path => {
+                return fs.existsSync(`upload/${path}`);
+            });
+            if(!isDocumentExists) {
+                throw new NotFoundError('Some documment not exists');
+            }
+            const zip = new Zipper();
+            for(let documentPath of paths){
+                const filePath = `upload/${documentPath}`;
+                zip.addLocalFile(filePath);
+            }
+            const fileName = `test`;
+            const outDirZip = `compress/${fileName}`;
+            zip.writeZip(`${outDirZip}.zip`);
+            res.download(`${outDirZip}.zip`);
             
         }catch(e: any){
             if(e instanceof ClientError){
