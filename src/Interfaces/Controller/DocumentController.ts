@@ -5,9 +5,11 @@ import prismaClient from "../../Infrastructures/Database/Prisma/PostgreSQL/Prism
 import databaseHelper from "../../Commons/Helpers/DatabaseHelper";
 import RegisterUser from "../../Domains/Entities/Users/RegisterUser";
 import Document from "../../Domains/Entities/Documents/Document";
+import Zipper from "adm-zip";
 import { v4 } from "uuid";
 import fs from 'fs-extra';
 import NotFoundError from "../../Commons/Exceptions/NotFoundError";
+import path from 'path';
 const documentRepository = new DocumentRepository({prisma: prismaClient, idGenerator: v4});
 
 export type DocumentType = {
@@ -94,8 +96,8 @@ class DocumentController {
             if(!fs.existsSync(`upload/${path}`)){
                 throw new NotFoundError('Document not found');
             };
-            console.log(`downloaded document upload/${path}`);
             res.download(`upload/${path}`);
+            res.setHeader('Content-disposition', 'filename=1693398592450-bg-2.jpg');
         }catch(err: any){
             if(err instanceof ClientError){
                 res.status(err.statusCode).json({
@@ -106,6 +108,43 @@ class DocumentController {
                 res.status(500).json({
                     status: 'fail',
                     message: `Error ${err.message}`
+                })
+            }
+        }
+    }
+
+    static downloadMultipleDocument (req: express.Request, res: express.Response) {
+        try{
+            // const paths: string[] = req.body.paths;            
+            // const isDocumentExists = paths.every(path => {
+            //     return fs.existsSync(`upload/${path}`);
+            // });
+            // if(!isDocumentExists) {
+            //     throw new NotFoundError('Some documment not exists');
+            // }
+            // const zip = new Zipper();
+            // for(let documentPath of paths){
+            //     const filePath = `upload/${documentPath}`;
+            //     zip.addLocalFile(filePath);
+            // }
+            // const fileName = `test`;
+            // const outDirZip = `compress/${fileName}`;
+            // zip.writeZip(`${outDirZip}.zip`);
+            // console.log('downloaded');
+            console.log(fs.existsSync('upload/1693398592450-bg-2.jpg'))
+            res.setHeader('Content-disposition', 'attachment; filename=1693398592450-bg-2.jpg');
+            res.download('upload/1693398592450-bg-2.jpg');
+            
+        }catch(e: any){
+            if(e instanceof ClientError){
+                res.status(e.statusCode).json({
+                    status: 'fail',
+                    message: e.message
+                });
+            }else{
+                res.status(500).json({
+                    status: 'fail',
+                    message: `Error ${e.message}`
                 })
             }
         }
