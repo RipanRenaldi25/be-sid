@@ -42,9 +42,17 @@ class AuthenticationController {
                 message: 'Logout success'
             });
         }catch(e: any){
-            res.json({
-                message: e.message
-            })
+            if(e instanceof ClientError){
+                res.status(e.statusCode).json({
+                    status: 'fail',
+                    message: e.message
+                })
+            }else {
+                res.status(500).json({
+                    status: 'fail',
+                    message: `error ${e.message}`
+                })
+            }
         }
     }
 }

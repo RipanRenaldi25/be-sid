@@ -18,10 +18,10 @@ export type DocumentType = {
 class DocumentController {
     static async uploadDocument(req: express.Request, res: express.Response) {
         try{
-            console.log({files: req.files});
+            const { id }: { id: string } = req.user;
+            const { documentKind } = req.body;
             const documents: any = req.files;
-            const {documentKind} = req.body;
-            await documentRepository.insertMultipleDocuments(documents, 'user-123', documentKind);
+            await documentRepository.insertMultipleDocuments(documents, id, documentKind);
             res.status(200).json({
                 status: 'success',
                 message: 'Upload succeed'
@@ -38,6 +38,52 @@ class DocumentController {
             })
         }
     }
+
+    static async getUrlToDownload (req: express.Request, res: express.Response) {
+        try{
+            const {id}: {id: string} = req.user;
+            const documentRepository = new DocumentRepository({prisma: prismaClient, idGenerator: v4});
+            const documentsPath = await documentRepository.getDocuments(id);
+
+            res.send('success');
+        }catch(err: any){
+            if(err instanceof ClientError) {
+                res.status(err.statusCode).json({
+                    status: 'fail',
+                    message: err.message
+                });
+            }
+            res.status(500).json({
+                status: 'fail',
+                message: `Server error ${err.message}`
+            })
+        }
+    }
+
+    static async getUrlDocumentKind(req: express.Request, res: express.Response) {
+        try{
+            const { id }: {id: string} = req.user;
+            const { kind } = req.params;
+            console.log(kind);
+            
+            const documentRepository = new DocumentRepository({prisma: prismaClient, idGenerator: v4});
+            const documentsPath = await documentRepository.getUrlToDownloadByDocumentKind(id, kind);
+            console.log({documentsPath});
+            res.send('success');
+        }catch(err: any){
+            if(err instanceof ClientError) {
+                res.status(err.statusCode).json({
+                    status: 'fail',
+                    message: err.message
+                });
+            }
+            res.status(500).json({
+                status: 'fail',
+                message: `Server error ${err.message}`
+            })
+        }
+    }
+
 }
 
 export default DocumentController;
