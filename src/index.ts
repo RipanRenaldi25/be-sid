@@ -9,12 +9,14 @@ import AuthenticationController from "./Interfaces/Controller/AuthenticationCont
 import dotenv from 'dotenv';
 import authenticationMidleware from "./Interfaces/Midlewares/AuthenticationMidleware";
 import authenticationRoute from "./Interfaces/Http/Api/authentications/authenticationRoutes";
+import cors from 'cors';
 dotenv.config();
 
 const init = () => {
     const app = routes(express, createServer());
     app.use(express.json());
     app.use(express.urlencoded({extended: false}));
+    app.use(cors());
     app.use('/upload', express.static('upload'));
     app.use('/users', userRoutes(express, UserController));
     app.use('/authentications', authenticationRoute(express, AuthenticationController));
