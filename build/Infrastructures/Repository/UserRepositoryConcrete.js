@@ -40,26 +40,56 @@ class UserRepositoryConcrete extends UserRepositoryAbstract_1.default {
     register(payload) {
         return __awaiter(this, void 0, void 0, function* () {
             const id = `user-${this.idGenerator()}`;
-            const { username, name, nik, password } = payload;
-            const newUser = yield this.prisma.user.create({
-                data: {
-                    id,
-                    username,
-                    name,
-                    nik,
-                    password,
-                    userRole: {
-                        connectOrCreate: {
-                            where: {
-                                role: payload.role
-                            },
+            const { username, name, nik, password, phone } = payload;
+            console.log({ phone });
+            let newUser;
+            if (phone) {
+                newUser = yield this.prisma.user.create({
+                    data: {
+                        id,
+                        username,
+                        name,
+                        nik,
+                        password,
+                        userRole: {
+                            connectOrCreate: {
+                                where: {
+                                    role: payload.role
+                                },
+                                create: {
+                                    role: payload.role
+                                }
+                            }
+                        },
+                        phones: {
                             create: {
-                                role: payload.role
+                                phone_number: phone
                             }
                         }
                     }
-                }
-            });
+                });
+            }
+            else {
+                newUser = yield this.prisma.user.create({
+                    data: {
+                        id,
+                        username,
+                        name,
+                        nik,
+                        password,
+                        userRole: {
+                            connectOrCreate: {
+                                where: {
+                                    role: payload.role
+                                },
+                                create: {
+                                    role: payload.role
+                                }
+                            }
+                        },
+                    }
+                });
+            }
             return new RegisteredUser_1.default(Object.assign({}, newUser));
         });
     }

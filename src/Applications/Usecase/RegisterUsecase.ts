@@ -13,8 +13,9 @@ class RegisterUseCase {
         this.passwordHash = passwordHash;
     };
 
-    async execute(payload: IUser): Promise<RegisteredUser> {
+    async execute(payload: IUser & {phone?: string}): Promise<RegisteredUser> {
         const userToRegister = new RegisterUser(payload);
+        userToRegister.phone = payload.phone;
         await this.userRepository.verifyAvailableUsername(userToRegister.username);
         userToRegister.password = await this.passwordHash.hash(userToRegister.password);
         const registeredUser = await this.userRepository.register(userToRegister);

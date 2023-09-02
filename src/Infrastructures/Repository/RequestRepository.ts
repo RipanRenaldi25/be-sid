@@ -14,9 +14,6 @@ class RequestRepository {
 
     async createRequest (payload: RequestPayloadType) {
         const request = await this.prisma.request.create({
-            data: {
-                type: payload.type,
-            },
             include: {
                 documents: true,
                 requestedBy: true

@@ -8,6 +8,7 @@ abstract class User implements IUser {
     protected _role: string;
     protected _name: string;
     protected _nik: string;
+    protected _phone?: string
     
 
     constructor({username, password, role, name, nik}: IUser){
@@ -66,9 +67,12 @@ abstract class User implements IUser {
     set nik(newNik){
         this._nik = newNik;
     }
-
-
-
+    set phone(newPhone){
+        this._phone = newPhone;
+    }
+    get phone(){
+        return this._phone;
+    }
 }
 
 export default User;

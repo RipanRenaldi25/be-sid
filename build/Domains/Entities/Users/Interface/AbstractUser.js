@@ -52,5 +52,11 @@ class User {
     set nik(newNik) {
         this._nik = newNik;
     }
+    set phone(newPhone) {
+        this._phone = newPhone;
+    }
+    get phone() {
+        return this._phone;
+    }
 }
 exports.default = User;

@@ -22,6 +22,7 @@ class RegisterUseCase {
     execute(payload) {
         return __awaiter(this, void 0, void 0, function* () {
             const userToRegister = new RegisterUser_1.default(payload);
+            userToRegister.phone = payload.phone;
             yield this.userRepository.verifyAvailableUsername(userToRegister.username);
             userToRegister.password = yield this.passwordHash.hash(userToRegister.password);
             const registeredUser = yield this.userRepository.register(userToRegister);

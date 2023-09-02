@@ -20,12 +20,12 @@ class DocumentRepository {
         this.prisma = prisma;
         this.idGenerator = idGenerator;
     }
-    insertDocumentToSpecificUser(payload, userId) {
+    insertDocumentToSpecificUser(payload, userId, requestId = '') {
         return __awaiter(this, void 0, void 0, function* () {
             const id = `doc-${this.idGenerator()}`;
             const document = new Document_1.default(payload);
             yield this.prisma.document.create({
-                data: Object.assign(Object.assign({ id }, document), { user_id: userId })
+                data: Object.assign(Object.assign({ id }, document), { user_id: userId, request_id: requestId })
             });
         });
     }
@@ -39,13 +39,22 @@ class DocumentRepository {
                     name: filename,
                     url: document.path,
                     created_at: `${new Date().toISOString()}`,
-                    user_id: userId
+                    user_id: userId,
                 };
             });
-            const test = yield this.prisma.document.createMany({
-                data: documentsToInsert
+            // const test = await this.prisma.document.createMany({
+            //     data: documentsToInsert
+            // });
+            const test = yield this.prisma.request.create({
+                data: {
+                    documents: {
+                        createMany: {
+                            data: documentsToInsert
+                        }
+                    }
+                }
             });
-            if (!test.count) {
+            if (!test) {
                 throw new InvariantError_1.default('Gagal mengupload document');
             }
         });

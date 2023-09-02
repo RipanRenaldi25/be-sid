@@ -13,9 +13,17 @@ ALTER TABLE "documents" ADD COLUMN     "request_id" VARCHAR(255) NOT NULL,
 ADD COLUMN     "url" VARCHAR(255) NOT NULL;
 
 -- CreateTable
+CREATE TABLE "phones" (
+    "id" SERIAL NOT NULL,
+    "phone_number" VARCHAR(255) NOT NULL,
+    "user_id" VARCHAR(255) NOT NULL,
+
+    CONSTRAINT "phones_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "requests" (
     "request_id" VARCHAR(255) NOT NULL,
-    "type" VARCHAR(255) NOT NULL,
     "processed" "Process" NOT NULL DEFAULT 'unprocessed',
 
     CONSTRAINT "requests_pkey" PRIMARY KEY ("request_id")
@@ -28,10 +36,16 @@ CREATE TABLE "_RequestToUser" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "phones_phone_number_key" ON "phones"("phone_number");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_RequestToUser_AB_unique" ON "_RequestToUser"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_RequestToUser_B_index" ON "_RequestToUser"("B");
+
+-- AddForeignKey
+ALTER TABLE "phones" ADD CONSTRAINT "phones_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "documents" ADD CONSTRAINT "documents_request_id_fkey" FOREIGN KEY ("request_id") REFERENCES "requests"("request_id") ON DELETE RESTRICT ON UPDATE CASCADE;

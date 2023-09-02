@@ -2,9 +2,6 @@ import ClientError from "../../Commons/Exceptions/ClientError"
 import express from 'express';
 import DocumentRepository from "../../Infrastructures/Repository/DocumentRepository";
 import prismaClient from "../../Infrastructures/Database/Prisma/PostgreSQL/PrismaClient";
-import databaseHelper from "../../Commons/Helpers/DatabaseHelper";
-import RegisterUser from "../../Domains/Entities/Users/RegisterUser";
-import Document from "../../Domains/Entities/Documents/Document";
 import Zipper from "adm-zip";
 import { v4 } from "uuid";
 import fs from 'fs-extra';
@@ -27,10 +24,7 @@ class DocumentController {
             const { id }: { id: string } = req.user;
             const { documentKind }: { documentKind: string } = req.body;
             const documents: any = req.files;
-            const request = await requestRepository.createRequest({
-                type: documentKind
-            });
-            await documentRepository.insertMultipleDocuments(documents, id, documentKind, request.request_id);
+            await documentRepository.insertMultipleDocuments(documents, id, documentKind);
             res.status(200).json({
                 status: 'success',
                 message: 'Upload succeed'
@@ -46,6 +40,40 @@ class DocumentController {
                     message: err.message
                 })
 
+            }
+        }
+    }
+    
+    static downloadMultipleDocument (req: express.Request, res: express.Response) {
+        try{
+            const paths: string[] = req.body.paths;            
+            const isDocumentExists = paths.every(path => {
+                return fs.existsSync(`upload/${path}`);
+            });
+            if(!isDocumentExists) {
+                throw new NotFoundError('Some documment not exists');
+            }
+            const zip = new Zipper();
+            for(let documentPath of paths){
+                const filePath = `upload/${documentPath}`;
+                zip.addLocalFile(filePath);
+            }
+            const fileName = `test`;
+            const outDirZip = `compress/${fileName}`;
+            zip.writeZip(`${outDirZip}.zip`);
+            res.download(`${outDirZip}.zip`);
+            
+        }catch(e: any){
+            if(e instanceof ClientError){
+                res.status(e.statusCode).json({
+                    status: 'fail',
+                    message: e.message
+                });
+            }else{
+                res.status(500).json({
+                    status: 'fail',
+                    message: `Error ${e.message}`
+                })
             }
         }
     }
@@ -123,39 +151,6 @@ class DocumentController {
         }
     }
 
-    static downloadMultipleDocument (req: express.Request, res: express.Response) {
-        try{
-            const paths: string[] = req.body.paths;            
-            const isDocumentExists = paths.every(path => {
-                return fs.existsSync(`upload/${path}`);
-            });
-            if(!isDocumentExists) {
-                throw new NotFoundError('Some documment not exists');
-            }
-            const zip = new Zipper();
-            for(let documentPath of paths){
-                const filePath = `upload/${documentPath}`;
-                zip.addLocalFile(filePath);
-            }
-            const fileName = `test`;
-            const outDirZip = `compress/${fileName}`;
-            zip.writeZip(`${outDirZip}.zip`);
-            res.download(`${outDirZip}.zip`);
-            
-        }catch(e: any){
-            if(e instanceof ClientError){
-                res.status(e.statusCode).json({
-                    status: 'fail',
-                    message: e.message
-                });
-            }else{
-                res.status(500).json({
-                    status: 'fail',
-                    message: `Error ${e.message}`
-                })
-            }
-        }
-    }
 
 }
 

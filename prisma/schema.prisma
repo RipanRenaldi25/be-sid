@@ -21,8 +21,18 @@ model User {
   userRole       Role            @relation(fields: [role], references: [role])
   authentication Authentication?
   requests       Request[]
+  phones         Phone[]
 
   @@map("users")
+}
+
+model Phone {
+  id           Int    @id @default(autoincrement()) @db.Integer
+  phone_number String @unique @db.VarChar(255)
+  user_id      String @db.VarChar(255)
+  users        User   @relation(fields: [user_id], references: [id])
+
+  @@map("phones")
 }
 
 enum Process {
@@ -33,10 +43,9 @@ enum Process {
 
 model Request {
   request_id  String     @id @default(uuid()) @db.VarChar(255)
-  type        String     @db.VarChar(255)
+  processed   Process    @default(unprocessed)
   requestedBy User[]
   documents   Document[]
-  processed   Process    @default(unprocessed)
 
   @@map("requests")
 }

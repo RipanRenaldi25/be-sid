@@ -20,7 +20,9 @@ const uuid_1 = require("uuid");
 const fs_extra_1 = __importDefault(require("fs-extra"));
 const NotFoundError_1 = __importDefault(require("../../Commons/Exceptions/NotFoundError"));
 const path_1 = __importDefault(require("path"));
+const RequestRepository_1 = __importDefault(require("../../Infrastructures/Repository/RequestRepository"));
 const documentRepository = new DocumentRepository_1.default({ prisma: PrismaClient_1.default, idGenerator: uuid_1.v4 });
+const requestRepository = new RequestRepository_1.default({ prisma: PrismaClient_1.default });
 class DocumentController {
     static uploadDocument(req, res) {
         return __awaiter(this, void 0, void 0, function* () {

@@ -34,26 +34,56 @@ class UserRepositoryConcrete extends UserRepositoryAbstract {
     
     async register(payload: RegisterUser):Promise<RegisteredUser> {
         const id = `user-${this.idGenerator()}`;
-        const {username, name, nik, password} = payload;
-        const newUser = await this.prisma.user.create({
-            data: {
-                id,
-                username,
-                name,
-                nik,
-                password,
-                userRole: {
-                    connectOrCreate: {
-                        where: {
-                            role: payload.role
-                        },
+        const {username, name, nik, password, phone} = payload;
+        console.log({phone})
+        let newUser;
+        if(phone){
+            newUser = await this.prisma.user.create({
+                data: {
+                    id,
+                    username,
+                    name,
+                    nik,
+                    password,
+                    userRole: {
+                        connectOrCreate: {
+                            where: {
+                                role: payload.role
+                            },
+                            create: {
+                                role: payload.role
+                            }
+                        }
+                    },
+                    phones: {
                         create: {
-                            role: payload.role
+                            phone_number: phone
                         }
                     }
                 }
-            }
-        })
+            })
+        }else {
+            newUser = await this.prisma.user.create({
+                data: {
+                    id,
+                    username,
+                    name,
+                    nik,
+                    password,
+                    userRole: {
+                        connectOrCreate: {
+                            where: {
+                                role: payload.role
+                            },
+                            create: {
+                                role: payload.role
+                            }
+                        }
+                    },
+                }
+            })
+            
+        }
 
         return new RegisteredUser({...newUser});
     }
