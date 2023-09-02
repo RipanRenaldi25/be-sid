@@ -39,14 +39,16 @@ class DocumentRepository {
                 user_id: userId,
             }
         });
-        // const test = await this.prisma.document.createMany({
-        //     data: documentsToInsert
-        // });
         const test = await this.prisma.request.create({
             data: {
                 documents: {
                     createMany: {
                         data: documentsToInsert
+                    }
+                },
+                requestedBy: {
+                    connect: {
+                        id: userId
                     }
                 }
             }

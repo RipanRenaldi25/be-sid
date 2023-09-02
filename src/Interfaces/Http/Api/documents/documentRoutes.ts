@@ -2,6 +2,8 @@ import upload from "../../../../Infrastructures/Multer/Upload";
 
 const documentRoutes = (express: any, controller: any) => {
     const router = express.Router();
+    router.get('/request/:request_id', controller.getRequestedDocument);
+    router.get('/requests', controller.getRequests);
     router.get('/:kind', controller.getUrlDocumentKind);
     router.get('/download/:path', controller.downloadSingleDokumen);
     router.post('/', upload.array('document', 10), controller.uploadDocument);

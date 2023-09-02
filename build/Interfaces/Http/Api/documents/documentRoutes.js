@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Upload_1 = __importDefault(require("../../../../Infrastructures/Multer/Upload"));
 const documentRoutes = (express, controller) => {
     const router = express.Router();
+    router.get('/request/:request_id', controller.getRequestedDocument);
+    router.get('/requests', controller.getRequests);
     router.get('/:kind', controller.getUrlDocumentKind);
     router.get('/download/:path', controller.downloadSingleDokumen);
     router.post('/', Upload_1.default.array('document', 10), controller.uploadDocument);

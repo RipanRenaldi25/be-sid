@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import NotFoundError from "../../Commons/Exceptions/NotFoundError";
 
 
 type RequestPayloadType = {
@@ -32,6 +33,22 @@ class RequestRepository {
                 
             }
         })
+        if(!request?.documents){
+            throw new NotFoundError('Document not found');
+        }
+
+        return request;
+    }
+
+    async getRequests() {
+        const request = await this.prisma.request.findMany({
+            orderBy: [{
+                created_at: 'desc'
+            }],
+            include: {
+                requestedBy: true
+            }
+        });
 
         return request;
     }

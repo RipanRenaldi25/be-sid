@@ -44,6 +44,7 @@ enum Process {
 model Request {
   request_id  String     @id @default(uuid()) @db.VarChar(255)
   processed   Process    @default(unprocessed)
+  created_at  DateTime   @default(now()) @db.Timestamp
   requestedBy User[]
   documents   Document[]
 

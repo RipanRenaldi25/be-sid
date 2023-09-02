@@ -51,43 +51,10 @@ class DocumentController {
             }
         });
     }
-    // static downloadMultipleDocument (req: express.Request, res: express.Response) {
-    //     try{
-    //         const paths: string[] = req.body.paths;            
-    //         const isDocumentExists = paths.every(path => {
-    //             return fs.existsSync(`upload/${path}`);
-    //         });
-    //         if(!isDocumentExists) {
-    //             throw new NotFoundError('Some documment not exists');
-    //         }
-    //         const zip = new Zipper();
-    //         for(let documentPath of paths){
-    //             const filePath = `upload/${documentPath}`;
-    //             zip.addLocalFile(filePath);
-    //         }
-    //         const fileName = `test`;
-    //         const outDirZip = `compress/${fileName}`;
-    //         zip.writeZip(`${outDirZip}.zip`);
-    //         res.download(`${outDirZip}.zip`);
-    //     }catch(e: any){
-    //         if(e instanceof ClientError){
-    //             res.status(e.statusCode).json({
-    //                 status: 'fail',
-    //                 message: e.message
-    //             });
-    //         }else{
-    //             res.status(500).json({
-    //                 status: 'fail',
-    //                 message: `Error ${e.message}`
-    //             })
-    //         }
-    //     }
-    // }
     static downloadMultipleDocument(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { request_id } = req.body;
-                console.log({ request_id });
                 const requestedDocuments = yield requestRepository.getRequestedDocument(request_id);
                 console.log(requestedDocuments);
                 const isDocumentsExists = requestedDocuments.documents.every(document => fs_extra_1.default.existsSync(`upload/${document.url}`));
@@ -145,6 +112,59 @@ class DocumentController {
                     res.status(500).json({
                         status: 'fail',
                         message: err
+                    });
+                }
+            }
+        });
+    }
+    static getRequestedDocument(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { request_id } = req.params;
+                console.log({ request_id });
+                const requestedDocument = yield requestRepository.getRequestedDocument(request_id);
+                res.status(200).json({
+                    status: 'success',
+                    message: 'Document found',
+                    data: requestedDocument.documents
+                });
+            }
+            catch (err) {
+                if (err instanceof ClientError_1.default) {
+                    res.status(err.statusCode).json({
+                        status: 'fail',
+                        message: err.message
+                    });
+                }
+                else {
+                    res.status(500).json({
+                        status: 'fail',
+                        message: err
+                    });
+                }
+            }
+        });
+    }
+    static getRequests(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const requests = yield requestRepository.getRequests();
+                res.status(200).json({
+                    status: 'success',
+                    data: requests
+                });
+            }
+            catch (err) {
+                if (err instanceof ClientError_1.default) {
+                    res.status(err.statusCode).json({
+                        status: 'fail',
+                        message: err.message
+                    });
+                }
+                else {
+                    res.status(500).json({
+                        status: 'fail',
+                        message: `Server error ${err.message}`
                     });
                 }
             }
