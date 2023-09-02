@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test:watch": "jest --coverage --watchAll",
-    "test": "jest"
+    "test": "jest",
+    "start:dev": "npx tsc --build && node ./build/index.js"
   },
   "jest": {
     "transform": {

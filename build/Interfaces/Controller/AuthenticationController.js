@@ -57,9 +57,18 @@ class AuthenticationController {
                 });
             }
             catch (e) {
-                res.json({
-                    message: e.message
-                });
+                if (e instanceof ClientError_1.default) {
+                    res.status(e.statusCode).json({
+                        status: 'fail',
+                        message: e.message
+                    });
+                }
+                else {
+                    res.status(500).json({
+                        status: 'fail',
+                        message: `error ${e.message}`
+                    });
+                }
             }
         });
     }

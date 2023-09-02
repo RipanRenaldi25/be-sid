@@ -11,15 +11,20 @@ const UserController_1 = __importDefault(require("./Interfaces/Controller/UserCo
 const documentRoutes_1 = __importDefault(require("./Interfaces/Http/Api/documents/documentRoutes"));
 const DocumentController_1 = __importDefault(require("./Interfaces/Controller/DocumentController"));
 const AuthenticationController_1 = __importDefault(require("./Interfaces/Controller/AuthenticationController"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const AuthenticationMidleware_1 = __importDefault(require("./Interfaces/Midlewares/AuthenticationMidleware"));
+const authenticationRoutes_1 = __importDefault(require("./Interfaces/Http/Api/authentications/authenticationRoutes"));
+const cors_1 = __importDefault(require("cors"));
+dotenv_1.default.config();
 const init = () => {
-    const router = express_1.default.Router();
     const app = (0, routes_1.default)(express_1.default, (0, CreateServer_1.default)());
     app.use(express_1.default.json());
     app.use(express_1.default.urlencoded({ extended: false }));
+    app.use((0, cors_1.default)());
+    app.use('/upload', express_1.default.static('upload'));
     app.use('/users', (0, userRoutes_1.default)(express_1.default, UserController_1.default));
-    app.use('/documents', (0, documentRoutes_1.default)(express_1.default, DocumentController_1.default));
-    app.use('/', router.put('/', AuthenticationController_1.default.updateRefreshToken));
-    app.use('/:refreshToken', AuthenticationController_1.default.deleteRefreshToken);
+    app.use('/authentications', (0, authenticationRoutes_1.default)(express_1.default, AuthenticationController_1.default));
+    app.use('/documents', AuthenticationMidleware_1.default, (0, documentRoutes_1.default)(express_1.default, DocumentController_1.default));
     app.listen(3001, () => {
         console.log(`SERVER RUNNING ON PORT ${3001}`);
     });

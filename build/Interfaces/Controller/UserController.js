@@ -61,6 +61,10 @@ class UserController {
                     status: 'success',
                     message: 'berhasil login',
                     data: {
+                        id: user.id,
+                        name: user.name,
+                        role: user.role,
+                        username,
                         accessToken: user.token,
                         refreshToken: user.refreshToken
                     }

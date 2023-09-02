@@ -24,21 +24,17 @@ class DocumentRepository {
         return __awaiter(this, void 0, void 0, function* () {
             const id = `doc-${this.idGenerator()}`;
             const document = new Document_1.default(payload);
-            const insertedDocument = yield this.prisma.document.create({
+            yield this.prisma.document.create({
                 data: Object.assign(Object.assign({ id }, document), { user_id: userId })
             });
-            console.log({ insertedDocument: Object.assign({}, insertedDocument) });
-            console.log(`insert document invoked ${id}`);
         });
     }
     ;
     insertMultipleDocuments(documents, userId, documentKind) {
         return __awaiter(this, void 0, void 0, function* () {
             const documentsToInsert = documents.map((document) => {
-                const id = `doc-${this.idGenerator()}`;
                 const [filename] = Utilities_1.default.getFileNameAndExtension(document.originalname)[0];
                 return {
-                    id,
                     kind: documentKind,
                     name: filename,
                     url: document.path,
@@ -55,6 +51,39 @@ class DocumentRepository {
         });
     }
     ;
+    getDocuments(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const documents = yield this.prisma.document.findMany({
+                where: {
+                    user_id: userId
+                },
+                include: {
+                    user: true
+                }
+            });
+            return documents;
+        });
+    }
+    getUrlToDownloadByDocumentKind(userId, documentKind) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const documents = yield this.prisma.document.findMany({
+                where: {
+                    AND: [
+                        {
+                            user_id: userId
+                        },
+                        {
+                            kind: documentKind
+                        }
+                    ]
+                },
+                include: {
+                    user: true
+                }
+            });
+            return documents;
+        });
+    }
 }
 ;
 exports.default = DocumentRepository;

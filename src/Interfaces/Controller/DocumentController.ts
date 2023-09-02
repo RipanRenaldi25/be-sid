@@ -36,10 +36,12 @@ class DocumentController {
                     status: 'fail',
                     message: err.message
                 });
+            }else{
+                res.status(500).json({
+                    message: err.message
+                })
+
             }
-            res.status(500).json({
-                message: err.message
-            })
         }
     }
 
@@ -56,11 +58,13 @@ class DocumentController {
                     status: 'fail',
                     message: err.message
                 });
+            }else{
+                res.status(500).json({
+                    status: 'fail',
+                    message: `Server error ${err.message}`
+                })
+
             }
-            res.status(500).json({
-                status: 'fail',
-                message: `Server error ${err.message}`
-            })
         }
     }
 
@@ -82,11 +86,13 @@ class DocumentController {
                     status: 'fail',
                     message: err.message
                 });
+            }else{
+                res.status(500).json({
+                    status: 'fail',
+                    message: `Server error ${err.message}`
+                })
+
             }
-            res.status(500).json({
-                status: 'fail',
-                message: `Server error ${err.message}`
-            })
         }
     }
 

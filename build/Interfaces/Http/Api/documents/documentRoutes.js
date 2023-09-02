@@ -7,6 +7,9 @@ const Upload_1 = __importDefault(require("../../../../Infrastructures/Multer/Upl
 const documentRoutes = (express, controller) => {
     const router = express.Router();
     router.post('/', Upload_1.default.array('document', 10), controller.uploadDocument);
+    router.get('/download/:path', controller.downloadSingleDokumen);
+    router.post('/downloads', controller.downloadMultipleDocument);
+    router.get('/:kind', controller.getUrlDocumentKind);
     return router;
 };
 exports.default = documentRoutes;
