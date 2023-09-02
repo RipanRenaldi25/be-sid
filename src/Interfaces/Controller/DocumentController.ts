@@ -44,36 +44,98 @@ class DocumentController {
         }
     }
     
-    static downloadMultipleDocument (req: express.Request, res: express.Response) {
-        try{
-            const paths: string[] = req.body.paths;            
-            const isDocumentExists = paths.every(path => {
-                return fs.existsSync(`upload/${path}`);
-            });
-            if(!isDocumentExists) {
-                throw new NotFoundError('Some documment not exists');
-            }
-            const zip = new Zipper();
-            for(let documentPath of paths){
-                const filePath = `upload/${documentPath}`;
-                zip.addLocalFile(filePath);
-            }
-            const fileName = `test`;
-            const outDirZip = `compress/${fileName}`;
-            zip.writeZip(`${outDirZip}.zip`);
-            res.download(`${outDirZip}.zip`);
+    // static downloadMultipleDocument (req: express.Request, res: express.Response) {
+    //     try{
+    //         const paths: string[] = req.body.paths;            
+    //         const isDocumentExists = paths.every(path => {
+    //             return fs.existsSync(`upload/${path}`);
+    //         });
+    //         if(!isDocumentExists) {
+    //             throw new NotFoundError('Some documment not exists');
+    //         }
+    //         const zip = new Zipper();
+    //         for(let documentPath of paths){
+    //             const filePath = `upload/${documentPath}`;
+    //             zip.addLocalFile(filePath);
+    //         }
+    //         const fileName = `test`;
+    //         const outDirZip = `compress/${fileName}`;
+    //         zip.writeZip(`${outDirZip}.zip`);
+    //         res.download(`${outDirZip}.zip`);
             
-        }catch(e: any){
-            if(e instanceof ClientError){
-                res.status(e.statusCode).json({
+    //     }catch(e: any){
+    //         if(e instanceof ClientError){
+    //             res.status(e.statusCode).json({
+    //                 status: 'fail',
+    //                 message: e.message
+    //             });
+    //         }else{
+    //             res.status(500).json({
+    //                 status: 'fail',
+    //                 message: `Error ${e.message}`
+    //             })
+    //         }
+    //     }
+    // }
+    static async downloadMultipleDocument(req: express.Request, res: express.Response) {
+        try{
+            const { request_id } = req.body;
+            console.log({request_id});
+            const requestedDocuments = await requestRepository.getRequestedDocument(request_id);
+            console.log(requestedDocuments);
+            const isDocumentsExists = requestedDocuments!.documents.every(document => fs.existsSync(`upload/${document.url}`));
+            if(!isDocumentsExists){
+                throw new NotFoundError('Some document did not exists');
+            };
+
+            const zip = new Zipper();
+            for(let document of requestedDocuments!.documents) {
+                zip.addLocalFile(`upload/${document.url}`);
+            }
+            const fileName=`doc-${+new Date()}`;
+            const outDir = `compress/`;
+            zip.writeZip(`${outDir}/${fileName}.zip`);
+            res.download(`${outDir}/${fileName}.zip`);
+        }catch(err: any){
+            if(err instanceof ClientError){
+                res.status(err.statusCode).json({
                     status: 'fail',
-                    message: e.message
+                    message: err.message
                 });
             }else{
                 res.status(500).json({
                     status: 'fail',
-                    message: `Error ${e.message}`
+                    message: err
                 })
+
+            }
+        }
+    }
+
+    static async deleteCompresedDocument (req: express.Request, res: express.Response) {
+        try{
+            const { path } = req.body;
+            console.log({path});
+            if(!fs.existsSync(`compress/${path}`)) {
+                throw new NotFoundError('Compressed file did not found');
+            }
+            fs.removeSync(`compress/${path}`);
+            res.status(200).json({
+                status: 'success',
+                message: 'Compresse document deleted'
+            })
+        }catch(err: any){
+            if(err instanceof ClientError){
+                res.status(err.statusCode).json({
+                    status: 'fail',
+                    message: err.message
+                });
+            }else{
+                res.status(500).json({
+                    status: 'fail',
+                    message: err
+                })
+
             }
         }
     }

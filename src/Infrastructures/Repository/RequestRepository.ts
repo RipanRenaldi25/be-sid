@@ -21,6 +21,20 @@ class RequestRepository {
         });
         return request;
     }
+
+    async getRequestedDocument(requestId: string){
+        const request = await this.prisma.request.findUnique({
+            where: {
+                request_id: requestId
+            },
+            include: {
+                documents: true
+                
+            }
+        })
+
+        return request;
+    }
 }
 
 export default RequestRepository

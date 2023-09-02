@@ -24,5 +24,18 @@ class RequestRepository {
             return request;
         });
     }
+    getRequestedDocument(requestId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const request = yield this.prisma.request.findUnique({
+                where: {
+                    request_id: requestId
+                },
+                include: {
+                    documents: true
+                }
+            });
+            return request;
+        });
+    }
 }
 exports.default = RequestRepository;
