@@ -20,8 +20,25 @@ model User {
   document       Document[]
   userRole       Role            @relation(fields: [role], references: [role])
   authentication Authentication?
+  requests       Request[]
 
   @@map("users")
+}
+
+enum Process {
+  unprocessed
+  processed
+  completed
+}
+
+model Request {
+  request_id  String     @id @default(uuid()) @db.VarChar(255)
+  type        String     @db.VarChar(255)
+  requestedBy User[]
+  documents   Document[]
+  processed   Process    @default(unprocessed)
+
+  @@map("requests")
 }
 
 model Role {
@@ -48,6 +65,8 @@ model Document {
   url        String   @db.VarChar(255)
   user_id    String   @db.VarChar(100)
   user       User     @relation(fields: [user_id], references: [id])
+  request_id String   @db.VarChar(255)
+  Request    Request  @relation(fields: [request_id], references: [request_id])
 
   @@map("documents")
 }

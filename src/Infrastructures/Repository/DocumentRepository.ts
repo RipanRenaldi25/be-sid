@@ -27,7 +27,7 @@ class DocumentRepository {
     };
 
 
-    async insertMultipleDocuments(documents: any[], userId: string, documentKind: string) {
+    async insertMultipleDocuments(documents: any[], userId: string, documentKind: string, requestId: string) {
         const documentsToInsert = documents.map((document) => {
             const [filename]: string[] | string = Utilities.getFileNameAndExtension(document.originalname)[0];
             return {
@@ -35,9 +35,11 @@ class DocumentRepository {
                 name: filename,
                 url: document.path,
                 created_at: `${new Date().toISOString()}`,
-                user_id: userId
+                user_id: userId,
+                request_id: requestId
             }
         });
+        console.log({documentsToInsert});
         const test = await this.prisma.document.createMany({
             data: documentsToInsert
         });

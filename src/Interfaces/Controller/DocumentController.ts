@@ -10,7 +10,9 @@ import { v4 } from "uuid";
 import fs from 'fs-extra';
 import NotFoundError from "../../Commons/Exceptions/NotFoundError";
 import p from 'path';
+import RequestRepository from "../../Infrastructures/Repository/RequestRepository";
 const documentRepository = new DocumentRepository({prisma: prismaClient, idGenerator: v4});
+const requestRepository = new RequestRepository({prisma: prismaClient});
 
 export type DocumentType = {
     name: string,
@@ -23,9 +25,12 @@ class DocumentController {
     static async uploadDocument(req: express.Request, res: express.Response) {
         try{
             const { id }: { id: string } = req.user;
-            const { documentKind } = req.body;
+            const { documentKind }: { documentKind: string } = req.body;
             const documents: any = req.files;
-            await documentRepository.insertMultipleDocuments(documents, id, documentKind);
+            const request = await requestRepository.createRequest({
+                type: documentKind
+            });
+            await documentRepository.insertMultipleDocuments(documents, id, documentKind, request.request_id);
             res.status(200).json({
                 status: 'success',
                 message: 'Upload succeed'
