@@ -14,8 +14,7 @@ class LoginUsecase {
     async execute(payload: {username: string, password: string}) {
         const {username, password} = payload;
         await this.userRepository.checkUserOnDatabase(username);
-        const isSuccess = await this.userRepository.deleteUserTokenIfExists(username);
-        console.log({isSuccess});
+        await this.userRepository.deleteUserTokenIfExists(username);
         await this.userRepository.login({username, password});
         const user = await this.userRepository.getUserByUsername(username);
         const token = this.tokenGenerator.generateToken({
@@ -27,7 +26,7 @@ class LoginUsecase {
             id: user!.id,
             role: user!.role,
             username,
-        }, 3, process.env.SECRET_REFRESH_TOKEN! || 'REFRESH_TOKEN_RAHASIA');
+        }, 9, process.env.SECRET_REFRESH_TOKEN! || 'REFRESH_TOKEN_RAHASIA');
         await this.userRepository.insertRefreshToken(refreshToken, user!.id);
         const returnedUser: Pick<UserLogedIn, 'id' | 'name' | 'role' | 'token'> & {
             username: string,

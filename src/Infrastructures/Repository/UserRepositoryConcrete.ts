@@ -35,7 +35,6 @@ class UserRepositoryConcrete extends UserRepositoryAbstract {
     async register(payload: RegisterUser):Promise<RegisteredUser> {
         const id = `user-${this.idGenerator()}`;
         const {username, name, nik, password, phone} = payload;
-        console.log({phone})
         let newUser;
         if(phone){
             newUser = await this.prisma.user.create({
@@ -137,7 +136,6 @@ class UserRepositoryConcrete extends UserRepositoryAbstract {
     async deleteUserTokenIfExists(username: string): Promise<boolean> {
         const user = await this.getUserToken(username);
         if(user?.authentication){
-            console.log({auth: user.authentication});
             await this.prisma.authentication.delete({
                 where: {
                     user_id: user.id
@@ -177,6 +175,36 @@ class UserRepositoryConcrete extends UserRepositoryAbstract {
             throw new NotFoundError(e.message);
 
         }
+    }
+
+    async getUsers () {
+        const users = await this.prisma.user.findMany({
+            include: {
+                phones: {
+                    select: {
+                        phone_number: true
+                    }
+                }
+            },
+        });
+
+        return users;
+    }
+
+    async getUserByNIK (nik: string) {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                nik
+            },
+            include: {
+                phones: {
+                    select: {
+                        phone_number: true
+                    }
+                }
+            }
+        });
+        return user;
     }
 
 

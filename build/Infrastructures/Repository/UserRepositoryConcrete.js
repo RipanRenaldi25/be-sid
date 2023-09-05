@@ -41,7 +41,6 @@ class UserRepositoryConcrete extends UserRepositoryAbstract_1.default {
         return __awaiter(this, void 0, void 0, function* () {
             const id = `user-${this.idGenerator()}`;
             const { username, name, nik, password, phone } = payload;
-            console.log({ phone });
             let newUser;
             if (phone) {
                 newUser = yield this.prisma.user.create({
@@ -145,7 +144,6 @@ class UserRepositoryConcrete extends UserRepositoryAbstract_1.default {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.getUserToken(username);
             if (user === null || user === void 0 ? void 0 : user.authentication) {
-                console.log({ auth: user.authentication });
                 yield this.prisma.authentication.delete({
                     where: {
                         user_id: user.id
@@ -187,6 +185,37 @@ class UserRepositoryConcrete extends UserRepositoryAbstract_1.default {
             catch (e) {
                 throw new NotFoundError_1.default(e.message);
             }
+        });
+    }
+    getUsers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const users = yield this.prisma.user.findMany({
+                include: {
+                    phones: {
+                        select: {
+                            phone_number: true
+                        }
+                    }
+                },
+            });
+            return users;
+        });
+    }
+    getUserByNIK(nik) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield this.prisma.user.findUnique({
+                where: {
+                    nik
+                },
+                include: {
+                    phones: {
+                        select: {
+                            phone_number: true
+                        }
+                    }
+                }
+            });
+            return user;
         });
     }
 }

@@ -19,7 +19,6 @@ const adm_zip_1 = __importDefault(require("adm-zip"));
 const uuid_1 = require("uuid");
 const fs_extra_1 = __importDefault(require("fs-extra"));
 const NotFoundError_1 = __importDefault(require("../../Commons/Exceptions/NotFoundError"));
-const path_1 = __importDefault(require("path"));
 const RequestRepository_1 = __importDefault(require("../../Infrastructures/Repository/RequestRepository"));
 const documentRepository = new DocumentRepository_1.default({ prisma: PrismaClient_1.default, idGenerator: uuid_1.v4 });
 const requestRepository = new RequestRepository_1.default({ prisma: PrismaClient_1.default });
@@ -56,15 +55,18 @@ class DocumentController {
             try {
                 const { request_id } = req.body;
                 const requestedDocuments = yield requestRepository.getRequestedDocument(request_id);
-                console.log(requestedDocuments);
-                const isDocumentsExists = requestedDocuments.documents.every(document => fs_extra_1.default.existsSync(`upload/${document.url}`));
+                // const requestedDocumentPath = requestedDocuments.map((document: any[]) => ({
+                //     ...document,
+                //     url: document.url.split('\\')[1]
+                // }));
+                const isDocumentsExists = requestedDocuments.documents.every(document => fs_extra_1.default.existsSync(`${document.url}`));
                 if (!isDocumentsExists) {
                     throw new NotFoundError_1.default('Some document did not exists');
                 }
                 ;
                 const zip = new adm_zip_1.default();
                 for (let document of requestedDocuments.documents) {
-                    zip.addLocalFile(`upload/${document.url}`);
+                    zip.addLocalFile(`${document.url}`);
                 }
                 const fileName = `doc-${+new Date()}`;
                 const outDir = `compress/`;
@@ -87,15 +89,37 @@ class DocumentController {
             }
         });
     }
+    static changeStatus(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { requestId } = req.params;
+                const { process } = req.body;
+                const request = yield requestRepository.changeRequest(requestId, process);
+                res.status(200).json({
+                    status: 'success',
+                    message: 'berhasil mengubah status',
+                    data: request
+                });
+            }
+            catch (err) {
+                if (err instanceof ClientError_1.default) {
+                    res.status(err.statusCode).json({
+                        status: 'fail',
+                        message: err.message
+                    });
+                }
+                else {
+                    res.status(500).json({
+                        message: err.message
+                    });
+                }
+            }
+        });
+    }
     static deleteCompresedDocument(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { path } = req.body;
-                console.log({ path });
-                if (!fs_extra_1.default.existsSync(`compress/${path}`)) {
-                    throw new NotFoundError_1.default('Compressed file did not found');
-                }
-                fs_extra_1.default.removeSync(`compress/${path}`);
+                fs_extra_1.default.emptyDirSync('compress/');
                 res.status(200).json({
                     status: 'success',
                     message: 'Compresse document deleted'
@@ -121,7 +145,6 @@ class DocumentController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { request_id } = req.params;
-                console.log({ request_id });
                 const requestedDocument = yield requestRepository.getRequestedDocument(request_id);
                 res.status(200).json({
                     status: 'success',
@@ -194,17 +217,20 @@ class DocumentController {
             }
         });
     }
-    static getUrlDocumentKind(req, res) {
+    static searchRequest(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id } = req.user;
-                const { kind } = req.params;
-                const documentRepository = new DocumentRepository_1.default({ prisma: PrismaClient_1.default, idGenerator: uuid_1.v4 });
-                const documentsPath = yield documentRepository.getUrlToDownloadByDocumentKind(id, kind);
+                const { keyword, date, status } = req.query;
+                console.log({ keyword, date, status });
+                const requests = yield requestRepository.getRequestDocumentBySearch({
+                    keyword,
+                    date,
+                    status
+                });
                 res.status(200).json({
                     status: 'success',
-                    message: 'Document ditemukan',
-                    documents: documentsPath
+                    message: 'Request found',
+                    data: requests
                 });
             }
             catch (err) {
@@ -222,30 +248,6 @@ class DocumentController {
                 }
             }
         });
-    }
-    static downloadSingleDokumen(req, res) {
-        try {
-            const { path } = req.params;
-            if (!fs_extra_1.default.existsSync(`upload/${path}`)) {
-                throw new NotFoundError_1.default('Document not found');
-            }
-            ;
-            res.download(path_1.default.resolve(`upload/${path}`));
-        }
-        catch (err) {
-            if (err instanceof ClientError_1.default) {
-                res.status(err.statusCode).json({
-                    status: 'fail',
-                    message: err.message
-                });
-            }
-            else {
-                res.status(500).json({
-                    status: 'fail',
-                    message: `Error ${err.message}`
-                });
-            }
-        }
     }
 }
 exports.default = DocumentController;

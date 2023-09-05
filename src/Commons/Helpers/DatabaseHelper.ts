@@ -92,6 +92,7 @@ const databaseHelper = {
     async cleanAllData(){
         await prismaClient.$queryRaw`TRUNCATE TABLE users CASCADE`;
         await prismaClient.$queryRaw`TRUNCATE TABLE roles CASCADE`;
+        await prismaClient.$queryRaw`TRUNCATE TABLE requests CASCADE`;
     },
     async insertTokenToSpecificUser (token: string, userId: string) {
         const user = await prismaClient.user.update({

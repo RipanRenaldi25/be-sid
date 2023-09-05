@@ -18,8 +18,7 @@ class LoginUsecase {
         return __awaiter(this, void 0, void 0, function* () {
             const { username, password } = payload;
             yield this.userRepository.checkUserOnDatabase(username);
-            const isSuccess = yield this.userRepository.deleteUserTokenIfExists(username);
-            console.log({ isSuccess });
+            yield this.userRepository.deleteUserTokenIfExists(username);
             yield this.userRepository.login({ username, password });
             const user = yield this.userRepository.getUserByUsername(username);
             const token = this.tokenGenerator.generateToken({
@@ -31,7 +30,7 @@ class LoginUsecase {
                 id: user.id,
                 role: user.role,
                 username,
-            }, 3, process.env.SECRET_REFRESH_TOKEN || 'REFRESH_TOKEN_RAHASIA');
+            }, 9, process.env.SECRET_REFRESH_TOKEN || 'REFRESH_TOKEN_RAHASIA');
             yield this.userRepository.insertRefreshToken(refreshToken, user.id);
             const returnedUser = {
                 id: user.id,

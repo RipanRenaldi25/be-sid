@@ -108,6 +108,7 @@ const databaseHelper = {
         return __awaiter(this, void 0, void 0, function* () {
             yield PrismaClient_1.default.$queryRaw `TRUNCATE TABLE users CASCADE`;
             yield PrismaClient_1.default.$queryRaw `TRUNCATE TABLE roles CASCADE`;
+            yield PrismaClient_1.default.$queryRaw `TRUNCATE TABLE requests CASCADE`;
         });
     },
     insertTokenToSpecificUser(token, userId) {

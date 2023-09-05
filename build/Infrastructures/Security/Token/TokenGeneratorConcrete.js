@@ -20,7 +20,7 @@ class TokenGeneratorConcrete extends TokenGeneratorAbstract_1.default {
             return token;
         }
         token = this.jwt.sign(payload, secretToken, {
-            expiresIn: 3600 * 1
+            expiresIn: 3600 * 3
         });
         return token;
     }

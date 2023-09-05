@@ -13,7 +13,7 @@ class AuthenticationController {
             const newToken = await updateAccessTokenUsecase.execute(refreshToken);
             res.status(200).json({
                 status: 'success',
-                message: 'Refresh token updated',
+                message: 'Token updated',
                 accessToken: newToken
             })
         }catch(err: any){

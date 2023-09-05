@@ -3,6 +3,8 @@ import ClientError from '../../Commons/Exceptions/ClientError';
 import RegisterUseCase from '../../Applications/Usecase/RegisterUsecase';
 import LoginUsecase from '../../Applications/Usecase/LoginUsecase';
 import container from '../../Infrastructures/Container/ServicesContainer';
+import express from 'express';
+import UserRepositoryConcrete from '../../Infrastructures/Repository/UserRepositoryConcrete';
 
 class UserController {
     static async createUser(req: any, res: any){
@@ -67,6 +69,56 @@ class UserController {
             }
         }
 
+    }
+    static async getUsers (req: express.Request, res: express.Response) {
+        try{
+            const userRepository = container.getInstance(UserRepositoryConcrete.name);
+            const users = await userRepository.getUsers();
+
+            res.status(200).json({
+                status: 'success',
+                message: 'Users found',
+                data: users
+            })
+        }catch(err: any){
+            if(err instanceof ClientError){
+                res.status(err.statusCode).json({
+                    status: 'fail',
+                    message: 'Username atau password salah'
+                });
+            }else{
+                res.status(500).json({
+                    status: 'fail',
+                    message: `SERVER ERROR : ${err.message}`
+                })
+            }
+        }
+    }
+
+    static async getUserByNik(req: express.Request, res: express.Response) {
+        try{
+            const { nik } = req.params;
+            const userRepository = container.getInstance(UserRepositoryConcrete.name);
+            const user = await userRepository.getUserByNIK(nik);
+
+            res.status(200).json({
+                status: 'success',
+                message: 'User found',
+                data: user
+            })
+        }catch(err: any){
+            if(err instanceof ClientError){
+                res.status(err.statusCode).json({
+                    status: 'fail',
+                    message: 'Username atau password salah'
+                });
+            }else{
+                res.status(500).json({
+                    status: 'fail',
+                    message: `SERVER ERROR : ${err.message}`
+                })
+            }
+        }
     }
 }
 

@@ -20,11 +20,9 @@ class TokenGeneratorConcrete extends TokenGeneratorAbstract {
             return token;
         }
         token = this.jwt.sign(payload, secretToken, {
-            expiresIn: 3600 * 1
+            expiresIn: 3600 * 3
         });
-    
         return token;
-        
     }
 
     generateRefreshToken(payload: { id: string; username: string; role: string; }, expiresInHour: number, secretToken: string = 'REFRESH_TOKEN_RAHASIA'){

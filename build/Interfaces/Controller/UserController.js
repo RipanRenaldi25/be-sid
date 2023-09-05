@@ -17,6 +17,7 @@ const ClientError_1 = __importDefault(require("../../Commons/Exceptions/ClientEr
 const RegisterUsecase_1 = __importDefault(require("../../Applications/Usecase/RegisterUsecase"));
 const LoginUsecase_1 = __importDefault(require("../../Applications/Usecase/LoginUsecase"));
 const ServicesContainer_1 = __importDefault(require("../../Infrastructures/Container/ServicesContainer"));
+const UserRepositoryConcrete_1 = __importDefault(require("../../Infrastructures/Repository/UserRepositoryConcrete"));
 class UserController {
     static createUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -68,6 +69,61 @@ class UserController {
                         accessToken: user.token,
                         refreshToken: user.refreshToken
                     }
+                });
+            }
+            catch (err) {
+                if (err instanceof ClientError_1.default) {
+                    res.status(err.statusCode).json({
+                        status: 'fail',
+                        message: 'Username atau password salah'
+                    });
+                }
+                else {
+                    res.status(500).json({
+                        status: 'fail',
+                        message: `SERVER ERROR : ${err.message}`
+                    });
+                }
+            }
+        });
+    }
+    static getUsers(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userRepository = ServicesContainer_1.default.getInstance(UserRepositoryConcrete_1.default.name);
+                const users = yield userRepository.getUsers();
+                res.status(200).json({
+                    status: 'success',
+                    message: 'Users found',
+                    data: users
+                });
+            }
+            catch (err) {
+                if (err instanceof ClientError_1.default) {
+                    res.status(err.statusCode).json({
+                        status: 'fail',
+                        message: 'Username atau password salah'
+                    });
+                }
+                else {
+                    res.status(500).json({
+                        status: 'fail',
+                        message: `SERVER ERROR : ${err.message}`
+                    });
+                }
+            }
+        });
+    }
+    static getUserByNik(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { nik } = req.params;
+                const userRepository = ServicesContainer_1.default.getInstance(UserRepositoryConcrete_1.default.name);
+                const user = yield userRepository.getUserByNIK(nik);
+                res.status(200).json({
+                    status: 'success',
+                    message: 'User found',
+                    data: user
                 });
             }
             catch (err) {

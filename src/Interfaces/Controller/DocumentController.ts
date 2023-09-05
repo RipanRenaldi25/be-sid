@@ -48,15 +48,18 @@ class DocumentController {
         try{
             const { request_id } = req.body;
             const requestedDocuments = await requestRepository.getRequestedDocument(request_id);
-            console.log(requestedDocuments);
-            const isDocumentsExists = requestedDocuments!.documents.every(document => fs.existsSync(`upload/${document.url}`));
+            // const requestedDocumentPath = requestedDocuments.map((document: any[]) => ({
+            //     ...document,
+            //     url: document.url.split('\\')[1]
+            // }));
+            const isDocumentsExists = requestedDocuments!.documents.every(document => fs.existsSync(`${document.url}`));
             if(!isDocumentsExists){
                 throw new NotFoundError('Some document did not exists');
             };
 
             const zip = new Zipper();
             for(let document of requestedDocuments!.documents) {
-                zip.addLocalFile(`upload/${document.url}`);
+                zip.addLocalFile(`${document.url}`);
             }
             const fileName=`doc-${+new Date()}`;
             const outDir = `compress/`;
@@ -78,14 +81,34 @@ class DocumentController {
         }
     }
 
+    static async changeStatus(req: express.Request, res: express.Response) {
+        try{
+            const { requestId } = req.params;
+            const { process } = req.body;
+            const request = await requestRepository.changeRequest(requestId, process);
+            res.status(200).json({
+                status: 'success',
+                message: 'berhasil mengubah status',
+                data: request
+            })
+        }catch(err: any){
+            if(err instanceof ClientError){
+                res.status(err.statusCode).json({
+                    status: 'fail',
+                    message: err.message
+                });
+            }else{
+                res.status(500).json({
+                    message: err.message
+                })
+
+            }
+        }
+    }
+
     static async deleteCompresedDocument (req: express.Request, res: express.Response) {
         try{
-            const { path } = req.body;
-            console.log({path});
-            if(!fs.existsSync(`compress/${path}`)) {
-                throw new NotFoundError('Compressed file did not found');
-            }
-            fs.removeSync(`compress/${path}`);
+            fs.emptyDirSync('compress/');
             res.status(200).json({
                 status: 'success',
                 message: 'Compresse document deleted'
@@ -109,7 +132,6 @@ class DocumentController {
     static async getRequestedDocument (req: express.Request, res: express.Response) {
         try{
             const {request_id} = req.params;
-            console.log({request_id});
             const requestedDocument = await requestRepository.getRequestedDocument(request_id);
             
             res.status(200).json({
@@ -180,18 +202,21 @@ class DocumentController {
         }
     }
 
-    static async getUrlDocumentKind(req: express.Request, res: express.Response) {
+    static async searchRequest(req: express.Request, res: express.Response) {
         try{
-            const { id }: {id: string} = req.user;
-            const { kind } = req.params;
-            
-            const documentRepository = new DocumentRepository({prisma: prismaClient, idGenerator: v4});
-            const documentsPath = await documentRepository.getUrlToDownloadByDocumentKind(id, kind);
+            const { keyword, date, status }: {keyword?: string, date?: string, status?: 'unprocessed' | 'processed' | 'completed'} = req.query;
+            console.log({keyword, date, status})
+            const requests = await requestRepository.getRequestDocumentBySearch({
+                keyword,
+                date,
+                status
+            });
+
             res.status(200).json({
                 status: 'success',
-                message: 'Document ditemukan',
-                documents: documentsPath
-            })
+                message: 'Request found',
+                data: requests
+            });
         }catch(err: any){
             if(err instanceof ClientError) {
                 res.status(err.statusCode).json({
@@ -202,29 +227,6 @@ class DocumentController {
                 res.status(500).json({
                     status: 'fail',
                     message: `Server error ${err.message}`
-                })
-
-            }
-        }
-    }
-
-    static downloadSingleDokumen (req: express.Request, res: express.Response) {
-        try{
-            const { path } = req.params;
-            if(!fs.existsSync(`upload/${path}`)){
-                throw new NotFoundError('Document not found');
-            };
-            res.download(p.resolve(`upload/${path}`));
-        }catch(err: any){
-            if(err instanceof ClientError){
-                res.status(err.statusCode).json({
-                    status: 'fail',
-                    message: err.message
-                });
-            }else {
-                res.status(500).json({
-                    status: 'fail',
-                    message: `Error ${err.message}`
                 })
             }
         }
