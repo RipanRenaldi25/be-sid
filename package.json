@@ -7,6 +7,7 @@
     "test:watch": "jest --coverage --watchAll",
     "test": "jest",
     "start:dev": "npx tsc --build && node ./build/index.js",
+    "build": "npx tsc --build",
     "postinstall": "prisma generate"
   },
   "jest": {
