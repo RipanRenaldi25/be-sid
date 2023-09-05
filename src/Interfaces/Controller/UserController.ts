@@ -18,7 +18,7 @@ class UserController {
                 data: {
                     id: newUser.id,
                     name: newUser.name,
-                    username: newUser.username
+                    username: newUser.username,
                 }
             });
 

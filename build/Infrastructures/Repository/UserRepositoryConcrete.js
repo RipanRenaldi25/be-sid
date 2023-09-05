@@ -203,9 +203,11 @@ class UserRepositoryConcrete extends UserRepositoryAbstract_1.default {
     }
     getUserByNIK(nik) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield this.prisma.user.findUnique({
+            const user = yield this.prisma.user.findMany({
                 where: {
-                    nik
+                    nik: {
+                        contains: nik,
+                    }
                 },
                 include: {
                     phones: {
