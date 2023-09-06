@@ -7,8 +7,8 @@
     "test:watch": "jest --coverage --watchAll",
     "test": "jest",
     "start:dev": "npx tsc --build && node ./build/index.js",
-    "start": "node ./build/index.js",
-    "postinstall": "prisma generate"
+    "start:prod": "SET NODE_ENV=production && node ./build/index.js",
+    "build": "npx tsc --build"
   },
   "jest": {
     "transform": {

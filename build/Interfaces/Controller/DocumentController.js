@@ -55,10 +55,6 @@ class DocumentController {
             try {
                 const { request_id } = req.body;
                 const requestedDocuments = yield requestRepository.getRequestedDocument(request_id);
-                // const requestedDocumentPath = requestedDocuments.map((document: any[]) => ({
-                //     ...document,
-                //     url: document.url.split('\\')[1]
-                // }));
                 const isDocumentsExists = requestedDocuments.documents.every(document => fs_extra_1.default.existsSync(`${document.url}`));
                 if (!isDocumentsExists) {
                     throw new NotFoundError_1.default('Some document did not exists');
@@ -83,7 +79,7 @@ class DocumentController {
                 else {
                     res.status(500).json({
                         status: 'fail',
-                        message: err
+                        message: err.message
                     });
                 }
             }

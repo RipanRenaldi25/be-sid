@@ -48,10 +48,6 @@ class DocumentController {
         try{
             const { request_id } = req.body;
             const requestedDocuments = await requestRepository.getRequestedDocument(request_id);
-            // const requestedDocumentPath = requestedDocuments.map((document: any[]) => ({
-            //     ...document,
-            //     url: document.url.split('\\')[1]
-            // }));
             const isDocumentsExists = requestedDocuments!.documents.every(document => fs.existsSync(`${document.url}`));
             if(!isDocumentsExists){
                 throw new NotFoundError('Some document did not exists');
