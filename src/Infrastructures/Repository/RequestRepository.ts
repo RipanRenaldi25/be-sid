@@ -94,7 +94,7 @@ class RequestRepository {
                     },
                     {
                         created_at: {
-                            gte: date ? new Date(date).toISOString() : undefined,
+                            gte: date ? new Date(date+'T00:00:00').toISOString() : undefined,
                             lte: date ? new Date(date+'T23:59:59').toISOString() : undefined
                         }
                     },

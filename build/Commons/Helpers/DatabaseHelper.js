@@ -13,13 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const PrismaClient_1 = __importDefault(require("../../Infrastructures/Database/Prisma/PostgreSQL/PrismaClient"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const NotFoundError_1 = __importDefault(require("../Exceptions/NotFoundError"));
+const client_1 = require("@prisma/client");
+const prismaClient = new client_1.PrismaClient();
 const databaseHelper = {
     createUser(payload) {
         return __awaiter(this, void 0, void 0, function* () {
-            const newUser = yield PrismaClient_1.default.user.create({
+            const newUser = yield prismaClient.user.create({
                 data: {
                     id: 'user-123',
                     name: payload.name,
@@ -45,7 +46,7 @@ const databaseHelper = {
         return __awaiter(this, void 0, void 0, function* () {
             const { password } = payload;
             const encryptedPassword = yield bcrypt_1.default.hash(password, 10);
-            const newUser = yield PrismaClient_1.default.user.create({
+            const newUser = yield prismaClient.user.create({
                 data: {
                     id: 'user-123',
                     name: payload.name,
@@ -76,7 +77,7 @@ const databaseHelper = {
     },
     findUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield PrismaClient_1.default.user.findUnique({
+            const user = yield prismaClient.user.findUnique({
                 where: {
                     id,
                 },
@@ -91,7 +92,7 @@ const databaseHelper = {
     },
     findUserByUsername(username) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield PrismaClient_1.default.user.findUnique({
+            const user = yield prismaClient.user.findUnique({
                 where: {
                     username
                 },
@@ -106,14 +107,14 @@ const databaseHelper = {
     },
     cleanAllData() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield PrismaClient_1.default.$queryRaw `TRUNCATE TABLE users CASCADE`;
-            yield PrismaClient_1.default.$queryRaw `TRUNCATE TABLE roles CASCADE`;
-            yield PrismaClient_1.default.$queryRaw `TRUNCATE TABLE requests CASCADE`;
+            yield prismaClient.$queryRaw `TRUNCATE TABLE users CASCADE`;
+            yield prismaClient.$queryRaw `TRUNCATE TABLE roles CASCADE`;
+            yield prismaClient.$queryRaw `TRUNCATE TABLE requests CASCADE`;
         });
     },
     insertTokenToSpecificUser(token, userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield PrismaClient_1.default.user.update({
+            const user = yield prismaClient.user.update({
                 data: {
                     authentication: {
                         create: {

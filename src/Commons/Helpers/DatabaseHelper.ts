@@ -1,10 +1,11 @@
 /* istanbul ignore file */
 
 import RegisterUser from "../../Domains/Entities/Users/RegisterUser"
-import prismaClient from "../../Infrastructures/Database/Prisma/PostgreSQL/PrismaClient"
 import bcrypt from 'bcrypt';
 import UnauthorizeError from "../Exceptions/UnauthorizeError";
 import NotFoundError from "../Exceptions/NotFoundError";
+import { PrismaClient } from "@prisma/client";
+const prismaClient = new PrismaClient();
 
 const databaseHelper = {
     async createUser (payload: RegisterUser) {

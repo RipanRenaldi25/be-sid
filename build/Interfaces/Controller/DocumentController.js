@@ -79,7 +79,7 @@ class DocumentController {
                 else {
                     res.status(500).json({
                         status: 'fail',
-                        message: err.message
+                        message: err
                     });
                 }
             }
