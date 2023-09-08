@@ -50,8 +50,8 @@ const init = () => __awaiter(void 0, void 0, void 0, function* () {
     app.use('/users', (0, userRoutes_1.default)(express_1.default, UserController_1.default));
     app.use('/authentications', (0, authenticationRoutes_1.default)(express_1.default, AuthenticationController_1.default));
     app.use('/documents', AuthenticationMidleware_1.default, (0, documentRoutes_1.default)(express_1.default, DocumentController_1.default));
-    app.listen(3001, () => {
-        console.log(`SERVER RUNNING ON PORT ${3001}`);
+    app.listen(+process.env.PORT_APP, () => {
+        console.log(`SERVER RUNNING ON PORT ${process.env.PORT_APP}`);
     });
 });
 init();

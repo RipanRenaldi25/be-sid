@@ -38,8 +38,8 @@ const init = async () => {
     app.use('/users', userRoutes(express, UserController));
     app.use('/authentications', authenticationRoute(express, AuthenticationController));
     app.use('/documents', authenticationMidleware, documentRoutes(express, DocumentController));
-    app.listen(3001, () => {
-        console.log(`SERVER RUNNING ON PORT ${3001}`);
+    app.listen(+process.env.PORT_APP!, () => {
+        console.log(`SERVER RUNNING ON PORT ${process.env.PORT_APP}`);
     });
 };
 
