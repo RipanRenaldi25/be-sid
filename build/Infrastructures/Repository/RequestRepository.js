@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const luxon_1 = require("luxon");
 const NotFoundError_1 = __importDefault(require("../../Commons/Exceptions/NotFoundError"));
 var process;
 (function (process) {
@@ -87,6 +88,12 @@ class RequestRepository {
     }
     getRequestDocumentBySearch({ keyword, date, status }) {
         return __awaiter(this, void 0, void 0, function* () {
+            let indonesiaTime;
+            if (date) {
+                indonesiaTime = luxon_1.DateTime.fromFormat(date, 'yyyy-MM-dd', { zone: 'Asia/Jakarta' });
+            }
+            const gteIso = indonesiaTime ? indonesiaTime.startOf('day').toISO() : undefined;
+            const letIso = indonesiaTime ? indonesiaTime.endOf('day').toISO() : undefined;
             const request = yield this.prisma.request.findMany({
                 where: {
                     AND: [
@@ -102,8 +109,8 @@ class RequestRepository {
                         },
                         {
                             created_at: {
-                                gte: date ? new Date(date + 'T00:00:00').toISOString() : undefined,
-                                lte: date ? new Date(date + 'T23:59:59').toISOString() : undefined
+                                gte: date ? gteIso : undefined,
+                                lte: date ? letIso : undefined
                             }
                         },
                         {

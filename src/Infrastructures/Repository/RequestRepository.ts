@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { DateTime } from 'luxon';
 import NotFoundError from "../../Commons/Exceptions/NotFoundError";
 
 enum process {
@@ -79,6 +80,12 @@ class RequestRepository {
     }
 
     async getRequestDocumentBySearch({keyword, date, status}: {keyword?: string, date?: string, status?: 'unprocessed' | 'processed' | 'completed'}){
+        let indonesiaTime;
+        if(date){
+            indonesiaTime = DateTime.fromFormat(date, 'yyyy-MM-dd', {zone: 'Asia/Jakarta'});
+        }
+        const gteIso = indonesiaTime ? indonesiaTime.startOf('day').toISO() : undefined
+        const letIso = indonesiaTime ? indonesiaTime.endOf('day').toISO() : undefined
         const request = await this.prisma.request.findMany({
             where: {
                 AND: [
@@ -94,8 +101,8 @@ class RequestRepository {
                     },
                     {
                         created_at: {
-                            gte: date ? new Date(date+'T00:00:00').toISOString() : undefined,
-                            lte: date ? new Date(date+'T23:59:59').toISOString() : undefined
+                            gte: date ? gteIso! : undefined,
+                            lte: date ? letIso! : undefined
                         }
                     },
                     {
